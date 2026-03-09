@@ -1,80 +1,99 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 import json
-import os
+import mercadopago
 
 app = Flask(__name__)
+app.secret_key = "segredo123"
 
-ARQUIVO = "dados.json"
-
-
-# -------------------------
-# Persistência
-# -------------------------
-def carregar():
-    if not os.path.exists(ARQUIVO):
-        return []
-
-    with open(ARQUIVO, "r", encoding="utf-8") as f:
-        dados = json.load(f)
-        return dados if isinstance(dados, list) else []
+# TOKEN DO MERCADO PAGO
+sdk = mercadopago.SDK("SEU_ACCESS_TOKEN_AQUI")
 
 
-def salvar(dados):
-    with open(ARQUIVO, "w", encoding="utf-8") as f:
-        json.dump(dados, f, ensure_ascii=False, indent=4)
+# ----------------------
+# LOGIN
+# ----------------------
+
+@app.route("/", methods=["GET", "POST"])
+def login():
+
+    if request.method == "POST":
+
+        email = request.form["email"]
+        senha = request.form["senha"]
+
+        with open("usuarios.json") as f:
+            usuarios = json.load(f)
+
+        for u in usuarios:
+            if u["email"] == email and u["senha"] == senha:
+                session["usuario"] = email
+                return redirect("/dashboard")
+
+    return render_template("login.html")
 
 
-# -------------------------
-# Rotas
-# -------------------------
-@app.route("/")
-def index():
-    dados = carregar()
+# ----------------------
+# DASHBOARD
+# ----------------------
 
-    total_geral = sum(item["total"] for item in dados)
-    total_pago = sum(item["pago"] for item in dados)
+@app.route("/dashboard")
+def dashboard():
 
-    progresso = 0
-    if total_geral > 0:
-        progresso = int((total_pago / total_geral) * 100)
+    if "usuario" not in session:
+        return redirect("/")
 
-    return render_template(
-        "index.html",
-        orcamento=dados,
-        total_geral=total_geral,
-        total_pago=total_pago,
-        progresso=progresso
-    )
+    return render_template("dashboard.html")
 
 
-@app.route("/adicionar", methods=["POST"])
-def adicionar():
-    dados = carregar()
+# ----------------------
+# CRIAR PAGAMENTO
+# ----------------------
 
-    novo = {
-        "id": len(dados),
-        "nome": request.form["nome"],
-        "total": float(request.form["total"]),
-        "pago": float(request.form["pago"])
+@app.route("/criar_pagamento")
+def criar_pagamento():
+
+    preference_data = {
+        "items": [
+            {
+                "title": "Planner de Casamento Premium",
+                "quantity": 1,
+                "unit_price": 29.0
+            }
+        ],
+        "back_urls": {
+            "success": "http://localhost:5000/pagamento_sucesso",
+            "failure": "http://localhost:5000/pagamento_erro",
+            "pending": "http://localhost:5000/pagamento_pendente"
+        },
+        "auto_return": "approved"
     }
 
-    dados.append(novo)
-    salvar(dados)
-    return redirect("/")
+    preference_response = sdk.preference().create(preference_data)
+    preference = preference_response["response"]
+
+    return redirect(preference["init_point"])
 
 
-@app.route("/editar/<int:item_id>", methods=["POST"])
-def editar(item_id):
-    dados = carregar()
+# ----------------------
+# RETORNOS
+# ----------------------
 
-    for item in dados:
-        if item["id"] == item_id:
-            item["pago"] = float(request.form["pago"])
-            break
+@app.route("/pagamento_sucesso")
+def pagamento_sucesso():
+    return render_template("sucesso.html")
 
-    salvar(dados)
-    return redirect("/")
 
+@app.route("/pagamento_erro")
+def pagamento_erro():
+    return "Pagamento não aprovado."
+
+
+@app.route("/pagamento_pendente")
+def pagamento_pendente():
+    return "Pagamento pendente."
+
+
+# ----------------------
 
 if __name__ == "__main__":
     app.run(debug=True)
