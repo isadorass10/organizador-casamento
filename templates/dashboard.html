@@ -18,25 +18,122 @@
 Painel do Casamento 💍
 </h2>
 
-<div class="card p-4 shadow">
+<div class="alert alert-info">
 
-<h4>Plano Premium</h4>
+Seu plano atual: <b>{{ plano }}</b>
 
-<p>
-Tenha acesso a fornecedores ilimitados e recursos completos.
-</p>
+<br>
 
-<h2 class="text-success">
-R$ 29
-</h2>
+Fornecedores usados: {{ fornecedores|length }} / {{ limite }}
 
-<a href="/criar_pagamento" class="btn btn-success btn-lg mt-3">
-Assinar com Mercado Pago
+</div>
+
+<a href="/planos" class="btn btn-warning mb-4">
+Ver planos e fazer upgrade
 </a>
 
-<p class="mt-3 text-muted">
-Pix • Cartão • Boleto
-</p>
+<!-- FORMULÁRIO -->
+
+<div class="card p-4 shadow mb-4">
+
+<h4>Adicionar Fornecedor</h4>
+
+<form method="POST" action="/adicionar_fornecedor">
+
+<input
+name="nome"
+class="form-control mb-2"
+placeholder="Nome do fornecedor"
+required>
+
+<input
+name="categoria"
+class="form-control mb-2"
+placeholder="Categoria"
+required>
+
+<input
+name="telefone"
+class="form-control mb-2"
+placeholder="Telefone"
+required>
+
+<input
+name="total"
+class="form-control mb-2"
+placeholder="Valor"
+required>
+
+<button class="btn btn-primary">
+Adicionar fornecedor
+</button>
+
+</form>
+
+</div>
+
+
+<!-- TABELA -->
+
+<div class="card p-4 shadow">
+
+<h4>Seus fornecedores</h4>
+
+<table class="table">
+
+<tr>
+
+<th>Fornecedor</th>
+<th>Categoria</th>
+<th>Telefone</th>
+<th>Total</th>
+<th>WhatsApp</th>
+<th>Excluir</th>
+
+</tr>
+
+{% for f in fornecedores %}
+
+<tr>
+
+<td>{{ f.nome }}</td>
+
+<td>{{ f.categoria }}</td>
+
+<td>{{ f.telefone }}</td>
+
+<td>R$ {{ f.total }}</td>
+
+<td>
+
+<a
+href="https://wa.me/55{{ f.telefone }}"
+class="btn btn-success btn-sm"
+target="_blank">
+
+WhatsApp
+
+</a>
+
+</td>
+
+<td>
+
+<a
+href="/excluir_fornecedor/{{ loop.index0 }}"
+class="btn btn-danger btn-sm">
+
+Excluir
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
 
 </div>
 
