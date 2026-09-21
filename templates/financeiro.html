@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Financeiro | Meu Casamento</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(244, 114, 182, 0.08),
+                    transparent 35%
+                ),
+                #f8fafc;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid #e5e7eb;
+            box-shadow:
+                0 10px 30px rgba(15, 23, 42, 0.05);
+        }
+
+        .progress-track {
+            background: #e5e7eb;
+        }
+
+        .progress-bar {
+            transition: width 0.4s ease;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen text-slate-800">
+
+    <!-- ================================================== -->
+    <!-- HEADER -->
+    <!-- ================================================== -->
+
+    <header
+        class="bg-white border-b border-slate-200 sticky top-0 z-30"
+    >
+        <div
+            class="
+                max-w-7xl
+                mx-auto
+                px-4
+                sm:px-6
+                lg:px-8
+                h-16
+                flex
+                items-center
+                justify-between
+            "
+        >
+
+            <div>
+                <h1 class="font-semibold text-lg text-slate-900">
+                    Financeiro
+                </h1>
+
+                <p class="text-xs text-slate-500">
+                    Controle financeiro do casamento
+                </p>
+            </div>
+
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="
+                    inline-flex
+                    items-center
+                    gap-2
+                    px-4
+                    py-2
+                    rounded-xl
+                    border
+                    border-slate-200
+                    text-sm
+                    font-medium
+                    text-slate-700
+                    hover:bg-slate-50
+                    transition
+                "
+            >
+                ← Voltar
+            </a>
+
+        </div>
+    </header>
+
+
+    <!-- ================================================== -->
+    <!-- CONTEÚDO -->
+    <!-- ================================================== -->
+
+    <main
+        class="
+            max-w-7xl
+            mx-auto
+            px-4
+            sm:px-6
+            lg:px-8
+            py-8
+        "
+    >
+
+        <!-- ============================================== -->
+        <!-- TÍTULO -->
+        <!-- ============================================== -->
+
+        <section class="mb-8">
+
+            <p
+                class="
+                    text-sm
+                    font-medium
+                    text-pink-600
+                    mb-1
+                "
+            >
+                Visão financeira
+            </p>
+
+            <h2
+                class="
+                    text-2xl
+                    sm:text-3xl
+                    font-bold
+                    text-slate-900
+                "
+            >
+                Seu casamento em números
+            </h2>
+
+            <p
+                class="
+                    text-slate-500
+                    mt-2
+                    max-w-2xl
+                "
+            >
+                Acompanhe o que já foi contratado,
+                quanto já foi pago e os próximos
+                compromissos financeiros.
+            </p>
+
+        </section>
+
+
+        <!-- ============================================== -->
+        <!-- CARDS PRINCIPAIS -->
+        <!-- ============================================== -->
+
+        <section
+            class="
+                grid
+                grid-cols-1
+                sm:grid-cols-2
+                xl:grid-cols-5
+                gap-4
+                mb-8
+            "
+        >
+
+            <!-- ORÇAMENTO -->
+
+            <div class="card rounded-2xl p-5">
+
+                <p class="text-sm text-slate-500">
+                    Orçamento planejado
+                </p>
+
+                <p
+                    class="
+                        text-2xl
+                        font-bold
+                        text-slate-900
+                        mt-2
+                    "
+                >
+                    R$
+                    {{ orcamento_planejado | moeda_brl }}
+                </p>
+
+            </div>
+
+
+            <!-- CONTRATADO -->
+
+            <div class="card rounded-2xl p-5">
+
+                <p class="text-sm text-slate-500">
+                    Total contratado
+                </p>
+
+                <p
+                    class="
+                        text-2xl
+                        font-bold
+                        text-slate-900
+                        mt-2
+                    "
+                >
+                    R$
+                    {{ total_contratado | moeda_brl }}
+                </p>
+
+                <p class="text-xs text-slate-400 mt-2">
+                    {{ total_fornecedores }}
+                    fornecedor{% if total_fornecedores != 1 %}es{% endif %}
+                </p>
+
+            </div>
+
+
+            <!-- PAGO -->
+
+            <div class="card rounded-2xl p-5">
+
+                <p class="text-sm text-slate-500">
+                    Total pago
+                </p>
+
+                <p
+                    class="
+                        text-2xl
+                        font-bold
+                        text-emerald-600
+                        mt-2
+                    "
+                >
+                    R$
+                    {{ total_pago | moeda_brl }}
+                </p>
+
+                <p class="text-xs text-slate-400 mt-2">
+                    {{ percentual_pago }}%
+                    dos contratos
+                </p>
+
+            </div>
+
+
+            <!-- A PAGAR -->
+
+            <div class="card rounded-2xl p-5">
+
+                <p class="text-sm text-slate-500">
+                    Ainda a pagar
+                </p>
+
+                <p
+                    class="
+                        text-2xl
+                        font-bold
+                        text-amber-600
+                        mt-2
+                    "
+                >
+                    R$
+                    {{ total_a_pagar | moeda_brl }}
+                </p>
+
+            </div>
+
+
+            <!-- SALDO -->
+
+            <div class="card rounded-2xl p-5">
+
+                <p class="text-sm text-slate-500">
+                    Saldo do orçamento
+                </p>
+
+                {% if saldo_orcamento >= 0 %}
+
+                    <p
+                        class="
+                            text-2xl
+                            font-bold
+                            text-emerald-600
+                            mt-2
+                        "
+                    >
+                        R$
+                        {{ saldo_orcamento | moeda_brl }}
+                    </p>
+
+                    <p class="text-xs text-emerald-600 mt-2">
+                        Dentro do orçamento
+                    </p>
+
+                {% else %}
+
+                    <p
+                        class="
+                            text-2xl
+                            font-bold
+                            text-red-600
+                            mt-2
+                        "
+                    >
+                        - R$
+                        {{ (saldo_orcamento * -1) | moeda_brl }}
+                    </p>
+
+                    <p class="text-xs text-red-600 mt-2">
+                        Acima do orçamento
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================================== -->
+        <!-- PROGRESSO DO ORÇAMENTO -->
+        <!-- ============================================== -->
+
+        <section
+            class="
+                card
+                rounded-2xl
+                p-6
+                mb-8
+            "
+        >
+
+            <div
+                class="
+                    flex
+                    flex-col
+                    sm:flex-row
+                    sm:items-center
+                    sm:justify-between
+                    gap-2
+                    mb-4
+                "
+            >
+
+                <div>
+
+                    <h3
+                        class="
+                            font-semibold
+                            text-lg
+                            text-slate-900
+                        "
+                    >
+                        Comprometimento do orçamento
+                    </h3>
+
+                    <p class="text-sm text-slate-500 mt-1">
+                        Percentual do orçamento já comprometido
+                        com fornecedores.
+                    </p>
+
+                </div>
+
+
+                <span
+                    class="
+                        text-sm
+                        font-semibold
+                        text-slate-700
+                    "
+                >
+                    {{ percentual_comprometido }}%
+                </span>
+
+            </div>
+
+
+            <div
+                class="
+                    progress-track
+                    w-full
+                    h-3
+                    rounded-full
+                    overflow-hidden
+                "
+            >
+
+                <div
+                    class="
+                        progress-bar
+                        h-full
+                        bg-pink-500
+                        rounded-full
+                    "
+                    style="
+                        width:
+                        {% if percentual_comprometido > 100 %}
+                            100%
+                        {% else %}
+                            {{ percentual_comprometido }}%
+                        {% endif %}
+                    "
+                >
+                </div>
+
+            </div>
+
+
+            {% if percentual_comprometido > 100 %}
+
+                <p
+                    class="
+                        text-xs
+                        text-red-600
+                        font-medium
+                        mt-3
+                    "
+                >
+                    Seu total contratado já ultrapassou
+                    o orçamento planejado.
+                </p>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- ============================================== -->
+        <!-- PLANEJAMENTO DE PAGAMENTOS -->
+        <!-- ============================================== -->
+
+        <section class="mb-8">
+
+            <div
+                class="
+                    flex
+                    flex-col
+                    sm:flex-row
+                    sm:items-center
+                    sm:justify-between
+                    gap-3
+                    mb-4
+                "
+            >
+
+                <div>
+
+                    <h3
+                        class="
+                            text-xl
+                            font-bold
+                            text-slate-900
+                        "
+                    >
+                        Próximos pagamentos
+                    </h3>
+
+                    <p class="text-sm text-slate-500 mt-1">
+                        Compromissos que você planejou
+                        com seus fornecedores.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="
+                        px-4
+                        py-2
+                        rounded-xl
+                        bg-pink-50
+                        border
+                        border-pink-100
+                    "
+                >
+
+                    <p class="text-xs text-pink-600">
+                        Total planejado
+                    </p>
+
+                    <p
+                        class="
+                            font-bold
+                            text-pink-700
+                        "
+                    >
+                        R$
+                        {{ total_planejado | moeda_brl }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if pagamentos_planejados %}
+
+                <div
+                    class="
+                        grid
+                        grid-cols-1
+                        lg:grid-cols-3
+                        gap-6
+                    "
+                >
+
+                    <!-- ================================== -->
+                    <!-- COM DATA -->
+                    <!-- ================================== -->
+
+                    <div
+                        class="
+                            lg:col-span-2
+                            card
+                            rounded-2xl
+                            overflow-hidden
+                        "
+                    >
+
+                        <div
+                            class="
+                                px-6
+                                py-5
+                                border-b
+                                border-slate-100
+                            "
+                        >
+
+                            <h4
+                                class="
+                                    font-semibold
+                                    text-slate-900
+                                "
+                            >
+                                Com data prevista
+                            </h4>
+
+                            <p class="text-sm text-slate-500 mt-1">
+                                Pagamentos que já possuem
+                                uma previsão definida.
+                            </p>
+
+                        </div>
+
+
+                        <div class="divide-y divide-slate-100">
+
+                            {% set namespace = namespace(encontrou=false) %}
+
+                            {% for pagamento in pagamentos_planejados %}
+
+                                {% if pagamento.data_prevista %}
+
+                                    {% set namespace.encontrou = true %}
+
+                                    <div
+                                        class="
+                                            px-6
+                                            py-5
+                                            flex
+                                            flex-col
+                                            sm:flex-row
+                                            sm:items-center
+                                            sm:justify-between
+                                            gap-4
+                                        "
+                                    >
+
+                                        <div class="min-w-0">
+
+                                            <div
+                                                class="
+                                                    flex
+                                                    flex-wrap
+                                                    items-center
+                                                    gap-2
+                                                "
+                                            >
+
+                                                <p
+                                                    class="
+                                                        font-semibold
+                                                        text-slate-900
+                                                    "
+                                                >
+                                                    {{ pagamento.descricao }}
+                                                </p>
+
+
+                                                <span
+                                                    class="
+                                                        inline-flex
+                                                        px-2.5
+                                                        py-1
+                                                        rounded-full
+                                                        bg-amber-50
+                                                        text-amber-700
+                                                        text-xs
+                                                        font-medium
+                                                    "
+                                                >
+                                                    Pendente
+                                                </span>
+
+                                            </div>
+
+
+                                            <p
+                                                class="
+                                                    text-sm
+                                                    text-slate-500
+                                                    mt-1
+                                                "
+                                            >
+                                                {{ pagamento.fornecedor_nome }}
+                                            </p>
+
+
+                                            {% set partes = pagamento.data_prevista.split('-') %}
+
+                                            <p
+                                                class="
+                                                    text-xs
+                                                    text-slate-400
+                                                    mt-2
+                                                "
+                                            >
+                                                Previsto para
+                                                {{ partes[2] }}/{{ partes[1] }}/{{ partes[0] }}
+                                            </p>
+
+                                        </div>
+
+
+                                        <div
+                                            class="
+                                                flex
+                                                flex-col
+                                                sm:items-end
+                                                gap-2
+                                            "
+                                        >
+
+                                            <p
+                                                class="
+                                                    text-lg
+                                                    font-bold
+                                                    text-slate-900
+                                                "
+                                            >
+                                                R$
+                                                {{ pagamento.valor | moeda_brl }}
+                                            </p>
+
+
+                                            <a
+                                                href="{{ url_for(
+                                                    'historico_pagamentos',
+                                                    id=pagamento.fornecedor_id
+                                                ) }}"
+                                                class="
+                                                    text-sm
+                                                    font-medium
+                                                    text-pink-600
+                                                    hover:text-pink-700
+                                                "
+                                            >
+                                                Ver fornecedor →
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+
+                            {% if not namespace.encontrou %}
+
+                                <div
+                                    class="
+                                        px-6
+                                        py-10
+                                        text-center
+                                    "
+                                >
+
+                                    <p
+                                        class="
+                                            text-sm
+                                            text-slate-500
+                                        "
+                                    >
+                                        Nenhum pagamento com
+                                        data definida.
+                                    </p>
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ================================== -->
+                    <!-- SEM DATA -->
+                    <!-- ================================== -->
+
+                    <div
+                        class="
+                            card
+                            rounded-2xl
+                            overflow-hidden
+                        "
+                    >
+
+                        <div
+                            class="
+                                px-6
+                                py-5
+                                border-b
+                                border-slate-100
+                            "
+                        >
+
+                            <h4
+                                class="
+                                    font-semibold
+                                    text-slate-900
+                                "
+                            >
+                                Sem data definida
+                            </h4>
+
+                            <p class="text-sm text-slate-500 mt-1">
+                                Valores previstos, mas que ainda
+                                não possuem vencimento.
+                            </p>
+
+                        </div>
+
+
+                        <div
+                            class="
+                                p-6
+                                border-b
+                                border-slate-100
+                                bg-slate-50
+                            "
+                        >
+
+                            <p class="text-xs text-slate-500">
+                                Total sem data
+                            </p>
+
+                            <p
+                                class="
+                                    text-2xl
+                                    font-bold
+                                    text-slate-900
+                                    mt-1
+                                "
+                            >
+                                R$
+                                {{ total_planejado_sem_data | moeda_brl }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="divide-y divide-slate-100">
+
+                            {% set namespace_sem_data = namespace(encontrou=false) %}
+
+                            {% for pagamento in pagamentos_planejados %}
+
+                                {% if not pagamento.data_prevista %}
+
+                                    {% set namespace_sem_data.encontrou = true %}
+
+                                    <div class="p-5">
+
+                                        <p
+                                            class="
+                                                font-semibold
+                                                text-slate-900
+                                            "
+                                        >
+                                            {{ pagamento.descricao }}
+                                        </p>
+
+                                        <p
+                                            class="
+                                                text-sm
+                                                text-slate-500
+                                                mt-1
+                                            "
+                                        >
+                                            {{ pagamento.fornecedor_nome }}
+                                        </p>
+
+                                        <div
+                                            class="
+                                                flex
+                                                items-center
+                                                justify-between
+                                                gap-3
+                                                mt-4
+                                            "
+                                        >
+
+                                            <p
+                                                class="
+                                                    font-bold
+                                                    text-slate-900
+                                                "
+                                            >
+                                                R$
+                                                {{ pagamento.valor | moeda_brl }}
+                                            </p>
+
+
+                                            <a
+                                                href="{{ url_for(
+                                                    'historico_pagamentos',
+                                                    id=pagamento.fornecedor_id
+                                                ) }}"
+                                                class="
+                                                    text-xs
+                                                    font-medium
+                                                    text-pink-600
+                                                "
+                                            >
+                                                Abrir
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+
+                            {% if not namespace_sem_data.encontrou %}
+
+                                <div
+                                    class="
+                                        p-8
+                                        text-center
+                                    "
+                                >
+
+                                    <p
+                                        class="
+                                            text-sm
+                                            text-slate-500
+                                        "
+                                    >
+                                        Nenhum pagamento
+                                        sem data definida.
+                                    </p>
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            {% else %}
+
+                <!-- ====================================== -->
+                <!-- EMPTY STATE -->
+                <!-- ====================================== -->
+
+                <div
+                    class="
+                        card
+                        rounded-2xl
+                        px-6
+                        py-12
+                        text-center
+                    "
+                >
+
+                    <div
+                        class="
+                            w-14
+                            h-14
+                            mx-auto
+                            mb-4
+                            rounded-2xl
+                            bg-pink-50
+                            flex
+                            items-center
+                            justify-center
+                            text-2xl
+                        "
+                    >
+                        📅
+                    </div>
+
+                    <h4
+                        class="
+                            font-semibold
+                            text-slate-900
+                        "
+                    >
+                        Nenhum pagamento planejado
+                    </h4>
+
+                    <p
+                        class="
+                            text-sm
+                            text-slate-500
+                            mt-2
+                            max-w-md
+                            mx-auto
+                        "
+                    >
+                        Abra um fornecedor e adicione
+                        os pagamentos que pretende realizar
+                        futuramente.
+                    </p>
+
+
+                    <a
+                        href="{{ url_for('fornecedores') }}"
+                        class="
+                            inline-flex
+                            mt-5
+                            px-5
+                            py-2.5
+                            rounded-xl
+                            bg-slate-900
+                            text-white
+                            text-sm
+                            font-medium
+                            hover:bg-slate-800
+                            transition
+                        "
+                    >
+                        Ver fornecedores
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- ============================================== -->
+        <!-- CATEGORIAS + FORNECEDORES -->
+        <!-- ============================================== -->
+
+        <section
+            class="
+                grid
+                grid-cols-1
+                lg:grid-cols-2
+                gap-6
+            "
+        >
+
+            <!-- ========================================== -->
+            <!-- CATEGORIAS -->
+            <!-- ========================================== -->
+
+            <div
+                class="
+                    card
+                    rounded-2xl
+                    overflow-hidden
+                "
+            >
+
+                <div
+                    class="
+                        px-6
+                        py-5
+                        border-b
+                        border-slate-100
+                    "
+                >
+
+                    <h3
+                        class="
+                            font-semibold
+                            text-lg
+                            text-slate-900
+                        "
+                    >
+                        Gastos por categoria
+                    </h3>
+
+                    <p class="text-sm text-slate-500 mt-1">
+                        Distribuição dos contratos.
+                    </p>
+
+                </div>
+
+
+                {% if categorias %}
+
+                    <div class="divide-y divide-slate-100">
+
+                        {% for categoria in categorias %}
+
+                            <div class="px-6 py-5">
+
+                                <div
+                                    class="
+                                        flex
+                                        items-start
+                                        justify-between
+                                        gap-4
+                                    "
+                                >
+
+                                    <div>
+
+                                        <p
+                                            class="
+                                                font-semibold
+                                                text-slate-900
+                                            "
+                                        >
+                                            {{ categoria.categoria }}
+                                        </p>
+
+                                        <p
+                                            class="
+                                                text-xs
+                                                text-slate-400
+                                                mt-1
+                                            "
+                                        >
+                                            {{ categoria.quantidade }}
+                                            fornecedor{% if categoria.quantidade != 1 %}es{% endif %}
+                                        </p>
+
+                                    </div>
+
+
+                                    <div class="text-right">
+
+                                        <p
+                                            class="
+                                                font-bold
+                                                text-slate-900
+                                            "
+                                        >
+                                            R$
+                                            {{ categoria.total_contratado | moeda_brl }}
+                                        </p>
+
+                                        <p
+                                            class="
+                                                text-xs
+                                                text-emerald-600
+                                                mt-1
+                                            "
+                                        >
+                                            R$
+                                            {{ categoria.total_pago | moeda_brl }}
+                                            pagos
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="px-6 py-12 text-center">
+
+                        <p class="text-sm text-slate-500">
+                            Ainda não existem gastos cadastrados.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ========================================== -->
+            <!-- MAIORES FORNECEDORES -->
+            <!-- ========================================== -->
+
+            <div
+                class="
+                    card
+                    rounded-2xl
+                    overflow-hidden
+                "
+            >
+
+                <div
+                    class="
+                        px-6
+                        py-5
+                        border-b
+                        border-slate-100
+                    "
+                >
+
+                    <h3
+                        class="
+                            font-semibold
+                            text-lg
+                            text-slate-900
+                        "
+                    >
+                        Maiores contratos
+                    </h3>
+
+                    <p class="text-sm text-slate-500 mt-1">
+                        Os fornecedores de maior valor.
+                    </p>
+
+                </div>
+
+
+                {% if maiores_fornecedores %}
+
+                    <div class="divide-y divide-slate-100">
+
+                        {% for fornecedor in maiores_fornecedores %}
+
+                            <div
+                                class="
+                                    px-6
+                                    py-5
+                                    flex
+                                    items-center
+                                    justify-between
+                                    gap-4
+                                "
+                            >
+
+                                <div class="min-w-0">
+
+                                    <p
+                                        class="
+                                            font-semibold
+                                            text-slate-900
+                                            truncate
+                                        "
+                                    >
+                                        {{ fornecedor.nome }}
+                                    </p>
+
+                                    <p
+                                        class="
+                                            text-sm
+                                            text-slate-500
+                                            mt-1
+                                        "
+                                    >
+                                        {{ fornecedor.categoria_nome }}
+                                    </p>
+
+                                </div>
+
+
+                                <div class="text-right shrink-0">
+
+                                    <p
+                                        class="
+                                            font-bold
+                                            text-slate-900
+                                        "
+                                    >
+                                        R$
+                                        {{ fornecedor.valor | moeda_brl }}
+                                    </p>
+
+                                    <a
+                                        href="{{ url_for(
+                                            'historico_pagamentos',
+                                            id=fornecedor.id
+                                        ) }}"
+                                        class="
+                                            text-xs
+                                            font-medium
+                                            text-pink-600
+                                            hover:text-pink-700
+                                        "
+                                    >
+                                        Detalhes
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="px-6 py-12 text-center">
+
+                        <p class="text-sm text-slate-500">
+                            Nenhum fornecedor cadastrado.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

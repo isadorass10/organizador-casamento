@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Configure seu casamento | Meu Casamento
+    </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+
+<body
+    class="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50"
+>
+
+
+<div
+    class="min-h-screen flex items-center justify-center px-4 py-10"
+>
+
+    <div class="w-full max-w-2xl">
+
+
+        <!-- ================================================== -->
+        <!-- PROGRESSO -->
+        <!-- ================================================== -->
+
+        <div class="mb-6">
+
+            <div
+                class="flex items-center justify-between text-xs mb-2"
+            >
+
+                <span
+                    class="font-semibold text-rose-500"
+                >
+                    Configuração inicial
+                </span>
+
+                <span class="text-slate-400">
+                    2 de 2
+                </span>
+
+            </div>
+
+
+            <div
+                class="w-full h-2 bg-white rounded-full overflow-hidden"
+            >
+
+                <div
+                    class="h-full bg-rose-500 rounded-full w-full"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================================================== -->
+        <!-- CARD -->
+        <!-- ================================================== -->
+
+        <div
+            class="bg-white/95 backdrop-blur-sm shadow-2xl rounded-[32px] border border-rose-100 overflow-hidden"
+        >
+
+
+            <!-- HEADER -->
+
+            <div
+                class="px-6 md:px-8 pt-8 pb-6"
+            >
+
+                <div
+                    class="w-12 h-12 rounded-2xl bg-rose-100 flex items-center justify-center text-xl"
+                >
+                    💍
+                </div>
+
+
+                <p
+                    class="text-sm font-semibold text-rose-500 mt-5"
+                >
+                    Conta criada!
+                </p>
+
+
+                <h1
+                    class="text-2xl md:text-3xl font-bold text-slate-900 mt-1"
+                >
+                    Agora conte um pouco sobre o casamento
+                </h1>
+
+
+                <p
+                    class="text-sm text-slate-500 mt-3 leading-relaxed"
+                >
+                    Essas informações serão usadas para personalizar
+                    seu planejamento e acompanhar o progresso até o
+                    grande dia.
+                </p>
+
+            </div>
+
+
+
+            <!-- FLASH -->
+
+            <div class="px-6 md:px-8">
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+
+                    {% if messages %}
+
+                        {% for categoria, mensagem in messages %}
+
+                            <div
+                                class="mb-5 rounded-2xl px-4 py-3 text-sm font-medium
+                                {% if categoria == 'erro' %}
+                                    bg-red-50 text-red-700 border border-red-100
+                                {% else %}
+                                    bg-green-50 text-green-700 border border-green-100
+                                {% endif %}"
+                            >
+                                {{ mensagem }}
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+                {% endwith %}
+
+            </div>
+
+
+
+            <!-- ================================================== -->
+            <!-- FORM -->
+            <!-- ================================================== -->
+
+            <form
+                method="POST"
+                action="{{ url_for('salvar_onboarding') }}"
+                class="px-6 md:px-8 pb-8"
+            >
+            <input
+    type="hidden"
+    name="csrf_token"
+    value="{{ csrf_token() }}"
+>
+
+                <!-- VOCÊ -->
+
+                <div>
+
+                    <label
+                        class="block text-sm font-semibold text-slate-700 mb-2"
+                    >
+                        Seu nome
+                    </label>
+
+
+                    <input
+                        type="text"
+                        value="{{ casamento['nome_pessoa_1'] or usuario_nome }}"
+                        disabled
+                        class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-500 text-sm"
+                    >
+
+                </div>
+
+
+
+                <!-- OUTRA PESSOA -->
+
+                <div class="mt-5">
+
+                    <label
+                        class="block text-sm font-semibold text-slate-700 mb-2"
+                    >
+                        Nome da outra pessoa *
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="nome_pessoa_2"
+                        value="{{ casamento['nome_pessoa_2'] or '' }}"
+                        placeholder="Ex.: Júlia"
+                        required
+                        class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 text-sm transition"
+                    >
+
+                </div>
+
+
+
+                <!-- DATA -->
+
+                <div class="mt-5">
+
+                    <label
+                        class="block text-sm font-semibold text-slate-700 mb-2"
+                    >
+                        Data do casamento *
+                    </label>
+
+
+                    <input
+                        type="date"
+                        name="data_casamento"
+                        value="{{ casamento['data_casamento'] or '' }}"
+                        required
+                        class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 text-sm transition"
+                    >
+
+                </div>
+
+
+
+                <!-- LOCAL -->
+
+                <div class="mt-5">
+
+                    <label
+                        class="block text-sm font-semibold text-slate-700 mb-2"
+                    >
+                        Local do casamento
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="local_casamento"
+                        value="{{ casamento['local_casamento'] or '' }}"
+                        placeholder="Ex.: Espaço Garden"
+                        class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 text-sm transition"
+                    >
+
+                </div>
+
+
+
+                <!-- CIDADE / ESTADO -->
+
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5"
+                >
+
+                    <div class="sm:col-span-2">
+
+                        <label
+                            class="block text-sm font-semibold text-slate-700 mb-2"
+                        >
+                            Cidade
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="cidade"
+                            value="{{ casamento['cidade'] or '' }}"
+                            placeholder="Ex.: Belo Horizonte"
+                            class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 text-sm transition"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label
+                            class="block text-sm font-semibold text-slate-700 mb-2"
+                        >
+                            Estado
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="estado"
+                            value="{{ casamento['estado'] or '' }}"
+                            placeholder="MG"
+                            maxlength="2"
+                            class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white uppercase focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 text-sm transition"
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ORÇAMENTO / CONVIDADOS -->
+
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5"
+                >
+
+                    <div>
+
+                        <label
+                            class="block text-sm font-semibold text-slate-700 mb-2"
+                        >
+                            Orçamento planejado
+                        </label>
+
+
+                        <div class="relative">
+
+                            <span
+                                class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400"
+                            >
+                                R$
+                            </span>
+
+
+                            <input
+                                type="text"
+                                name="orcamento_planejado"
+                                value="{% if casamento['orcamento_planejado'] %}{{ casamento['orcamento_planejado'] | moeda_brl }}{% endif %}"
+                                placeholder="0,00"
+                                inputmode="decimal"
+                                class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 text-sm transition"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <label
+                            class="block text-sm font-semibold text-slate-700 mb-2"
+                        >
+                            Convidados estimados
+                        </label>
+
+
+                        <input
+                            type="number"
+                            name="convidados_estimados"
+                            value="{{ casamento['convidados_estimados'] or '' }}"
+                            placeholder="Ex.: 150"
+                            min="0"
+                            class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 text-sm transition"
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- INFORMAÇÃO -->
+
+                <div
+                    class="bg-rose-50 border border-rose-100 rounded-2xl p-4 mt-6"
+                >
+
+                    <p
+                        class="text-xs text-rose-600 leading-relaxed"
+                    >
+                        💡 Não precisa ter tudo definido agora.
+                        Local, orçamento e quantidade de convidados
+                        poderão ser alterados depois.
+                    </p>
+
+                </div>
+
+
+
+                <!-- BOTÃO -->
+
+                <button
+                    type="submit"
+                    class="w-full bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3.5 rounded-2xl shadow-lg shadow-rose-200 transition mt-7"
+                >
+                    Começar meu planejamento →
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <p
+            class="text-center text-xs text-slate-400 mt-5"
+        >
+            Você poderá alterar essas informações quando quiser.
+        </p>
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

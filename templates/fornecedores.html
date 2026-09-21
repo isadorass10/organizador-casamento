@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Fornecedores | Meu Casamento
+    </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+
+<body class="bg-[#F7F7F9] text-slate-800">
+
+<div class="min-h-screen">
+
+
+    <!-- ====================================================== -->
+    <!-- HEADER -->
+    <!-- ====================================================== -->
+
+    <header
+        class="bg-white border-b border-slate-200 sticky top-0 z-30"
+    >
+
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10 py-4 flex items-center justify-between gap-4"
+        >
+
+            <div class="flex items-center gap-3">
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="w-10 h-10 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center transition"
+                    title="Voltar"
+                >
+                    ←
+                </a>
+
+
+                <div>
+
+                    <p class="font-bold text-slate-900">
+                        Fornecedores
+                    </p>
+
+                    <p class="text-xs text-slate-400 mt-0.5">
+                        Contratos, parceiros e pagamentos
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- AÇÕES HEADER -->
+
+            <div class="flex items-center gap-2">
+
+                <button
+                    type="button"
+                    onclick="abrirModalCategorias()"
+                    class="inline-flex items-center gap-2 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 px-3 sm:px-4 py-3 rounded-2xl text-sm font-semibold transition"
+                >
+                    <span>
+                        ⚙
+                    </span>
+
+                    <span class="hidden sm:inline">
+                        Categorias
+                    </span>
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="abrirModalFornecedor()"
+                    class="inline-flex items-center gap-2 bg-rose-500 hover:bg-rose-600 text-white px-4 py-3 rounded-2xl text-sm font-semibold shadow-sm transition"
+                >
+
+                    <span class="text-lg leading-none">
+                        +
+                    </span>
+
+                    <span class="hidden sm:inline">
+                        Novo fornecedor
+                    </span>
+
+                    <span class="sm:hidden">
+                        Novo
+                    </span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ====================================================== -->
+    <!-- CONTEÚDO -->
+    <!-- ====================================================== -->
+
+    <main
+        class="max-w-7xl mx-auto px-4 sm:px-6 xl:px-10 py-7 lg:py-10"
+    >
+
+
+        <!-- ================================================== -->
+        <!-- FLASH -->
+        <!-- ================================================== -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for categoria, mensagem in messages %}
+
+                    <div
+                        class="mb-6 rounded-2xl px-5 py-4 text-sm font-medium
+                        {% if categoria == 'erro' %}
+                            bg-red-50 text-red-700 border border-red-100
+                        {% else %}
+                            bg-green-50 text-green-700 border border-green-100
+                        {% endif %}"
+                    >
+                        {{ mensagem }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+
+        <!-- ================================================== -->
+        <!-- TÍTULO -->
+        <!-- ================================================== -->
+
+        <div
+            class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-7"
+        >
+
+            <div>
+
+                <p class="text-sm font-semibold text-rose-500">
+                    Gestão
+                </p>
+
+                <h1
+                    class="text-2xl md:text-3xl font-bold text-slate-900 mt-1"
+                >
+                    Fornecedores do Casamento
+                </h1>
+
+                <p class="text-sm text-slate-500 mt-2">
+                    Acompanhe quem foi contratado, quanto já foi pago e o que ainda falta pagar.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================================================== -->
+        <!-- CARDS -->
+        <!-- ================================================== -->
+
+        <section
+            class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-8"
+        >
+
+
+            <!-- TOTAL FORNECEDORES -->
+
+            <div
+                class="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm"
+            >
+
+                <div class="flex items-start justify-between gap-3">
+
+                    <div>
+
+                        <p class="text-sm text-slate-500">
+                            Fornecedores
+                        </p>
+
+                        <p class="text-2xl font-bold text-slate-900 mt-2">
+                            {{ total_fornecedores }}
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="w-10 h-10 rounded-2xl bg-violet-50 flex items-center justify-center"
+                    >
+                        🤝
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CONTRATADO -->
+
+            <div
+                class="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm"
+            >
+
+                <div class="flex items-start justify-between gap-3">
+
+                    <div>
+
+                        <p class="text-sm text-slate-500">
+                            Contratado
+                        </p>
+
+                        <p
+                            class="text-xl md:text-2xl font-bold text-slate-900 mt-2"
+                        >
+                            R$ {{ total_contratado | moeda_brl }}
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="w-10 h-10 rounded-2xl bg-blue-50 flex items-center justify-center"
+                    >
+                        📄
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PAGO -->
+
+            <div
+                class="bg-white border border-green-100 rounded-3xl p-5 shadow-sm"
+            >
+
+                <div class="flex items-start justify-between gap-3">
+
+                    <div>
+
+                        <p class="text-sm text-slate-500">
+                            Pago
+                        </p>
+
+                        <p
+                            class="text-xl md:text-2xl font-bold text-green-600 mt-2"
+                        >
+                            R$ {{ total_pago | moeda_brl }}
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="w-10 h-10 rounded-2xl bg-green-50 flex items-center justify-center"
+                    >
+                        ✓
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PENDENTE -->
+
+            <div
+                class="bg-white border border-rose-100 rounded-3xl p-5 shadow-sm"
+            >
+
+                <div class="flex items-start justify-between gap-3">
+
+                    <div>
+
+                        <p class="text-sm text-slate-500">
+                            Falta pagar
+                        </p>
+
+                        <p
+                            class="text-xl md:text-2xl font-bold text-rose-500 mt-2"
+                        >
+                            R$ {{ total_pendente | moeda_brl }}
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="w-10 h-10 rounded-2xl bg-rose-50 flex items-center justify-center"
+                    >
+                        💰
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================================================== -->
+        <!-- LISTA -->
+        <!-- ================================================== -->
+
+        <section>
+
+            <div
+                class="flex items-center justify-between gap-4 mb-4"
+            >
+
+                <div>
+
+                    <h2 class="text-lg font-bold text-slate-900">
+                        Seus fornecedores
+                    </h2>
+
+                    <p class="text-sm text-slate-400 mt-1">
+                        Visualize o andamento financeiro de cada contrato.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            {% if fornecedores %}
+
+                <div
+                    class="grid grid-cols-1 lg:grid-cols-2 gap-5"
+                >
+
+                    {% for fornecedor in fornecedores %}
+
+                        {% set saldo = fornecedor["valor"] - fornecedor["valor_pago"] %}
+
+                        {% if fornecedor["valor"] > 0 %}
+
+                            {% set percentual = ((fornecedor["valor_pago"] / fornecedor["valor"]) * 100) | round | int %}
+
+                        {% else %}
+
+                            {% set percentual = 0 %}
+
+                        {% endif %}
+
+
+                        <article
+                            class="bg-white border border-slate-100 rounded-3xl p-5 md:p-6 shadow-sm hover:shadow-md transition"
+                        >
+
+                            <!-- TOPO -->
+
+                            <div
+                                class="flex items-start justify-between gap-4"
+                            >
+
+                                <div
+                                    class="flex items-start gap-3 min-w-0"
+                                >
+
+                                    <div
+                                        class="w-12 h-12 shrink-0 rounded-2xl bg-violet-50 flex items-center justify-center text-xl"
+                                    >
+                                        🤝
+                                    </div>
+
+
+                                    <div class="min-w-0">
+
+                                        <h3
+                                            class="font-bold text-slate-900 truncate"
+                                        >
+                                            {{ fornecedor["nome"] }}
+                                        </h3>
+
+
+                                        <div
+                                            class="flex flex-wrap gap-2 mt-2"
+                                        >
+
+                                            {% if fornecedor["categoria_nome"] %}
+
+                                                <span
+                                                    class="inline-flex bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg text-[11px] font-medium"
+                                                >
+                                                    {{ fornecedor["categoria_nome"] }}
+                                                </span>
+
+                                            {% else %}
+
+                                                <span
+                                                    class="inline-flex bg-amber-50 text-amber-600 px-2.5 py-1 rounded-lg text-[11px] font-medium"
+                                                >
+                                                    Sem categoria
+                                                </span>
+
+                                            {% endif %}
+
+
+                                            {% if saldo <= 0 and fornecedor["valor"] > 0 %}
+
+                                                <span
+                                                    class="inline-flex bg-green-50 text-green-600 px-2.5 py-1 rounded-lg text-[11px] font-semibold"
+                                                >
+                                                    Pago
+                                                </span>
+
+                                            {% elif fornecedor["valor_pago"] > 0 %}
+
+                                                <span
+                                                    class="inline-flex bg-blue-50 text-blue-600 px-2.5 py-1 rounded-lg text-[11px] font-semibold"
+                                                >
+                                                    Em pagamento
+                                                </span>
+
+                                            {% else %}
+
+                                                <span
+                                                    class="inline-flex bg-rose-50 text-rose-500 px-2.5 py-1 rounded-lg text-[11px] font-semibold"
+                                                >
+                                                    Pendente
+                                                </span>
+
+                                            {% endif %}
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                {% if fornecedor["whatsapp"] %}
+
+                                    <a
+                                        href="https://wa.me/{{ fornecedor['whatsapp'] | replace(' ', '') | replace('-', '') | replace('(', '') | replace(')', '') | replace('+', '') }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="w-10 h-10 shrink-0 rounded-xl bg-green-50 hover:bg-green-100 flex items-center justify-center transition"
+                                        title="Abrir WhatsApp"
+                                    >
+                                        💬
+                                    </a>
+
+                                {% endif %}
+
+                            </div>
+
+
+
+                            <!-- VALORES -->
+
+                            <div
+                                class="grid grid-cols-3 gap-3 mt-6"
+                            >
+
+                                <div>
+
+                                    <p class="text-[11px] text-slate-400">
+                                        Contratado
+                                    </p>
+
+                                    <p
+                                        class="text-sm font-bold text-slate-800 mt-1"
+                                    >
+                                        R$ {{ fornecedor["valor"] | moeda_brl }}
+                                    </p>
+
+                                </div>
+
+
+                                <div>
+
+                                    <p class="text-[11px] text-slate-400">
+                                        Pago
+                                    </p>
+
+                                    <p
+                                        class="text-sm font-bold text-green-600 mt-1"
+                                    >
+                                        R$ {{ fornecedor["valor_pago"] | moeda_brl }}
+                                    </p>
+
+                                </div>
+
+
+                                <div>
+
+                                    <p class="text-[11px] text-slate-400">
+                                        Restante
+                                    </p>
+
+                                    <p
+                                        class="text-sm font-bold text-rose-500 mt-1"
+                                    >
+                                        R$ {{ saldo | moeda_brl }}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- PROGRESSO -->
+
+                            <div class="mt-5">
+
+                                <div
+                                    class="flex items-center justify-between text-xs mb-2"
+                                >
+
+                                    <span class="text-slate-400">
+                                        Pagamento
+                                    </span>
+
+                                    <span
+                                        class="font-semibold text-slate-600"
+                                    >
+                                        {{ percentual }}%
+                                    </span>
+
+                                </div>
+
+
+                                <div
+                                    class="w-full h-2 bg-slate-100 rounded-full overflow-hidden"
+                                >
+
+                                    <div
+                                        class="h-2 bg-rose-500 rounded-full transition-all"
+                                        style="width: {{ percentual if percentual <= 100 else 100 }}%;"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- AÇÕES -->
+
+                            <div
+                                class="grid grid-cols-2 gap-3 mt-6"
+                            >
+
+                                <a
+                                    href="{{ url_for('historico_pagamentos', id=fornecedor['id']) }}"
+                                    class="border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl px-3 py-2.5 text-xs font-semibold transition text-center"
+                                >
+                                    Ver detalhes
+                                </a>
+
+
+                                {% if saldo > 0 %}
+
+                                    <button
+                                        type="button"
+                                        onclick="abrirModalPagamento(
+                                            '{{ fornecedor['id'] }}',
+                                            '{{ fornecedor['nome'] | e }}',
+                                            '{{ saldo }}'
+                                        )"
+                                        class="bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl px-3 py-2.5 text-xs font-semibold transition"
+                                    >
+                                        + Pagamento
+                                    </button>
+
+                                {% else %}
+
+                                    <div
+                                        class="bg-green-50 text-green-600 rounded-xl px-3 py-2.5 text-xs font-semibold text-center"
+                                    >
+                                        Quitado ✓
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <!-- ESTADO VAZIO -->
+
+                <div
+                    class="bg-white border border-dashed border-slate-200 rounded-3xl py-14 px-6 text-center"
+                >
+
+                    <div
+                        class="w-14 h-14 mx-auto rounded-2xl bg-violet-50 flex items-center justify-center text-2xl"
+                    >
+                        🤝
+                    </div>
+
+
+                    <h3
+                        class="font-bold text-slate-900 mt-5"
+                    >
+                        Nenhum fornecedor cadastrado
+                    </h3>
+
+                    <p
+                        class="text-sm text-slate-400 mt-2 max-w-md mx-auto"
+                    >
+                        Cadastre os fornecedores do casamento para acompanhar contratos e pagamentos em um só lugar.
+                    </p>
+
+
+                    <button
+                        type="button"
+                        onclick="abrirModalFornecedor()"
+                        class="mt-6 bg-rose-500 hover:bg-rose-600 text-white px-5 py-3 rounded-2xl text-sm font-semibold transition"
+                    >
+                        + Adicionar primeiro fornecedor
+                    </button>
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+
+
+        <footer
+            class="text-center py-10 text-xs text-slate-400"
+        >
+            Organizando sonhos, um detalhe de cada vez 💕
+        </footer>
+
+    </main>
+
+</div>
+
+
+
+<!-- ====================================================== -->
+<!-- OVERLAY NOVO FORNECEDOR -->
+<!-- ====================================================== -->
+
+<div
+    id="overlayFornecedor"
+    class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-40 hidden"
+></div>
+
+
+
+<!-- ====================================================== -->
+<!-- MODAL NOVO FORNECEDOR -->
+<!-- ====================================================== -->
+
+<div
+    id="modalFornecedor"
+    class="fixed inset-0 z-50 hidden items-center justify-center p-4"
+>
+
+    <div
+        class="bg-white w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-[28px] shadow-2xl"
+    >
+
+        <div
+            class="px-6 py-5 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10"
+        >
+
+            <div>
+
+                <p class="font-bold text-slate-900">
+                    Novo fornecedor
+                </p>
+
+                <p class="text-xs text-slate-400 mt-1">
+                    Cadastre um parceiro do casamento.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                onclick="fecharModalFornecedor()"
+                class="w-10 h-10 rounded-xl hover:bg-slate-100 text-slate-500 flex items-center justify-center transition"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+      <form
+    action="{{ url_for('add_fornecedor') }}"
+    method="POST"
+    class="p-6"
+>
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="{{ csrf_token() }}"
+    >
+
+            <div>
+
+                <label
+                    class="block text-sm font-semibold text-slate-700 mb-2"
+                >
+                    Nome do fornecedor *
+                </label>
+
+                <input
+                    type="text"
+                    name="nome"
+                    required
+                    placeholder="Ex.: Buffet Sabor & Arte"
+                    class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
+                >
+
+            </div>
+
+
+            <!-- CATEGORIA -->
+
+            <div class="mt-5">
+
+                <div
+                    class="flex items-center justify-between gap-3 mb-2"
+                >
+
+                    <label
+                        class="block text-sm font-semibold text-slate-700"
+                    >
+                        Categoria *
+                    </label>
+
+
+                    <button
+                        type="button"
+                        onclick="fecharModalFornecedor(); abrirModalCategorias();"
+                        class="text-xs font-semibold text-rose-500 hover:text-rose-600"
+                    >
+                        Gerenciar categorias
+                    </button>
+
+                </div>
+
+
+                <select
+                    name="categoria_id"
+                    required
+                    class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm bg-white transition"
+                >
+
+                    <option value="">
+                        Selecione uma categoria
+                    </option>
+
+                    {% for categoria in categorias %}
+
+                        <option value="{{ categoria['id'] }}">
+                            {{ categoria["nome"] }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- WHATSAPP -->
+
+            <div class="mt-5">
+
+                <label
+                    class="block text-sm font-semibold text-slate-700 mb-2"
+                >
+                    WhatsApp
+                </label>
+
+                <input
+                    type="text"
+                    name="whatsapp"
+                    placeholder="Ex.: 31999999999"
+                    class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
+                >
+
+                <p class="text-xs text-slate-400 mt-2">
+                    Informe DDD + número.
+                </p>
+
+            </div>
+
+
+            <!-- VALORES -->
+
+            <div
+                class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5"
+            >
+
+                <div>
+
+                    <label
+                        class="block text-sm font-semibold text-slate-700 mb-2"
+                    >
+                        Valor contratado *
+                    </label>
+
+                    <input
+                        type="text"
+                        name="valor"
+                        required
+                        placeholder="0,00"
+                        inputmode="decimal"
+                        class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        class="block text-sm font-semibold text-slate-700 mb-2"
+                    >
+                        Já pago
+                    </label>
+
+                    <input
+                        type="text"
+                        name="valor_pago"
+                        placeholder="0,00"
+                        inputmode="decimal"
+                        class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="bg-rose-50 rounded-2xl p-4 mt-5"
+            >
+
+                <p
+                    class="text-xs text-rose-600 leading-relaxed"
+                >
+                    💡 Se você já fez algum pagamento, informe o valor em
+                    <strong>“Já pago”</strong>. Ele será registrado automaticamente no histórico do fornecedor.
+                </p>
+
+            </div>
+
+
+            <div
+                class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 mt-7"
+            >
+
+                <button
+                    type="button"
+                    onclick="fecharModalFornecedor()"
+                    class="border border-slate-200 hover:bg-slate-50 text-slate-600 px-5 py-3 rounded-2xl text-sm font-semibold transition"
+                >
+                    Cancelar
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="bg-rose-500 hover:bg-rose-600 text-white px-5 py-3 rounded-2xl text-sm font-semibold shadow-sm transition"
+                >
+                    Salvar fornecedor
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- ====================================================== -->
+<!-- OVERLAY CATEGORIAS -->
+<!-- ====================================================== -->
+
+<div
+    id="overlayCategorias"
+    class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-40 hidden"
+></div>
+
+
+
+<!-- ====================================================== -->
+<!-- MODAL CATEGORIAS -->
+<!-- ====================================================== -->
+
+<div
+    id="modalCategorias"
+    class="fixed inset-0 z-50 hidden items-center justify-center p-4"
+>
+
+    <div
+        class="bg-white w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-[28px] shadow-2xl flex flex-col"
+    >
+
+        <!-- HEADER -->
+
+        <div
+            class="px-6 py-5 border-b border-slate-100 flex items-center justify-between shrink-0"
+        >
+
+            <div>
+
+                <p class="font-bold text-slate-900">
+                    Gerenciar categorias
+                </p>
+
+                <p class="text-xs text-slate-400 mt-1">
+                    Personalize as categorias dos seus fornecedores.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                onclick="fecharModalCategorias()"
+                class="w-10 h-10 rounded-xl hover:bg-slate-100 text-slate-500 flex items-center justify-center transition"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="overflow-y-auto">
+
+            <!-- NOVA CATEGORIA -->
+
+            <div
+                class="p-6 bg-slate-50 border-b border-slate-100"
+            >
+
+                <p
+                    class="text-sm font-bold text-slate-800"
+                >
+                    Nova categoria
+                </p>
+
+                <p
+                    class="text-xs text-slate-400 mt-1"
+                >
+                    Crie uma categoria personalizada para o seu casamento.
+                </p>
+
+
+                <form
+    action="{{ url_for('adicionar_categoria_fornecedor') }}"
+    method="POST"
+    class="flex flex-col sm:flex-row gap-3 mt-4"
+>
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="{{ csrf_token() }}"
+    >
+
+                    <input
+                        type="text"
+                        name="nome"
+                        maxlength="60"
+                        required
+                        placeholder="Ex.: Open Bar"
+                        class="flex-1 border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm bg-white transition"
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="bg-rose-500 hover:bg-rose-600 text-white px-5 py-3 rounded-2xl text-sm font-semibold transition shrink-0"
+                    >
+                        + Adicionar
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- LISTA DE CATEGORIAS -->
+
+            <div class="p-6">
+
+                <div
+                    class="flex items-center justify-between gap-3 mb-4"
+                >
+
+                    <div>
+
+                        <p
+                            class="text-sm font-bold text-slate-800"
+                        >
+                            Suas categorias
+                        </p>
+
+                        <p class="text-xs text-slate-400 mt-1">
+                            {{ categorias | length }}
+                            categoria{% if categorias | length != 1 %}s{% endif %}
+                            cadastrada{% if categorias | length != 1 %}s{% endif %}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if categorias %}
+
+                    <div class="space-y-3">
+
+                        {% for categoria in categorias %}
+
+                            <div
+                                class="border border-slate-100 rounded-2xl p-4"
+                            >
+
+                                <div
+                                    class="flex flex-col sm:flex-row sm:items-center gap-3"
+                                >
+
+                                    <!-- EDITAR NOME -->
+
+                                    <form
+    action="{{ url_for(
+        'editar_categoria_fornecedor',
+        id=categoria['id']
+    ) }}"
+    method="POST"
+    class="flex-1 flex flex-col sm:flex-row gap-2"
+>
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="{{ csrf_token() }}"
+    >
+
+                                        <input
+                                            type="text"
+                                            name="nome"
+                                            value="{{ categoria['nome'] }}"
+                                            maxlength="60"
+                                            required
+                                            class="flex-1 min-w-0 border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-xl px-3 py-2.5 text-sm transition"
+                                        >
+
+
+                                        <button
+                                            type="submit"
+                                            class="border border-slate-200 hover:bg-slate-50 text-slate-600 px-4 py-2.5 rounded-xl text-xs font-semibold transition"
+                                        >
+                                            Salvar
+                                        </button>
+
+                                    </form>
+
+
+                                    <!-- EXCLUIR -->
+
+                                    <button
+                                        type="button"
+                                        onclick="abrirConfirmacaoCategoria(
+                                            '{{ categoria['id'] }}',
+                                            '{{ categoria['nome'] | e }}'
+                                        )"
+                                        class="border border-red-100 bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2.5 rounded-xl text-xs font-semibold transition"
+                                    >
+                                        Excluir
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <div
+                        class="border border-dashed border-slate-200 rounded-2xl p-8 text-center"
+                    >
+
+                        <p class="text-sm font-semibold text-slate-700">
+                            Nenhuma categoria cadastrada
+                        </p>
+
+                        <p class="text-xs text-slate-400 mt-1">
+                            Crie sua primeira categoria acima.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div
+            class="px-6 py-4 border-t border-slate-100 flex justify-end shrink-0 bg-white"
+        >
+
+            <button
+                type="button"
+                onclick="fecharModalCategorias()"
+                class="border border-slate-200 hover:bg-slate-50 text-slate-600 px-5 py-2.5 rounded-2xl text-sm font-semibold transition"
+            >
+                Fechar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ====================================================== -->
+<!-- OVERLAY EXCLUSÃO CATEGORIA -->
+<!-- ====================================================== -->
+
+<div
+    id="overlayExcluirCategoria"
+    class="fixed inset-0 bg-slate-900/50 backdrop-blur-[2px] z-[60] hidden"
+></div>
+
+
+
+<!-- ====================================================== -->
+<!-- MODAL CONFIRMAR EXCLUSÃO CATEGORIA -->
+<!-- ====================================================== -->
+
+<div
+    id="modalExcluirCategoria"
+    class="fixed inset-0 z-[70] hidden items-center justify-center p-4"
+>
+
+    <div
+        class="bg-white w-full max-w-md rounded-[28px] shadow-2xl"
+    >
+
+        <div class="p-6">
+
+            <div
+                class="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center text-xl"
+            >
+                🗑️
+            </div>
+
+
+            <h3
+                class="font-bold text-slate-900 text-lg mt-5"
+            >
+                Excluir categoria?
+            </h3>
+
+
+            <p
+                class="text-sm text-slate-500 mt-2 leading-relaxed"
+            >
+                Você está prestes a excluir a categoria
+                <strong
+                    id="nomeCategoriaExcluir"
+                    class="text-slate-700"
+                ></strong>.
+            </p>
+
+
+            <p
+                class="text-xs text-slate-400 mt-3"
+            >
+                Se houver algum fornecedor utilizando essa categoria,
+                a exclusão será bloqueada.
+            </p>
+
+
+           <form
+    id="formExcluirCategoria"
+    method="POST"
+    class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 mt-6"
+>
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="{{ csrf_token() }}"
+    >
+
+                <button
+                    type="button"
+                    onclick="fecharConfirmacaoCategoria()"
+                    class="border border-slate-200 hover:bg-slate-50 text-slate-600 px-5 py-3 rounded-2xl text-sm font-semibold transition"
+                >
+                    Cancelar
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="bg-red-500 hover:bg-red-600 text-white px-5 py-3 rounded-2xl text-sm font-semibold transition"
+                >
+                    Excluir categoria
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ====================================================== -->
+<!-- OVERLAY PAGAMENTO -->
+<!-- ====================================================== -->
+
+<div
+    id="overlayPagamento"
+    class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-40 hidden"
+></div>
+
+
+
+<!-- ====================================================== -->
+<!-- MODAL PAGAMENTO -->
+<!-- ====================================================== -->
+
+<div
+    id="modalPagamento"
+    class="fixed inset-0 z-50 hidden items-center justify-center p-4"
+>
+
+    <div
+        class="bg-white w-full max-w-md rounded-[28px] shadow-2xl"
+    >
+
+        <div
+            class="px-6 py-5 border-b border-slate-100 flex items-center justify-between"
+        >
+
+            <div>
+
+                <p class="font-bold text-slate-900">
+                    Registrar pagamento
+                </p>
+
+                <p
+                    id="nomeFornecedorPagamento"
+                    class="text-xs text-slate-400 mt-1"
+                >
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                onclick="fecharModalPagamento()"
+                class="w-10 h-10 rounded-xl hover:bg-slate-100 text-slate-500 flex items-center justify-center transition"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <form
+    id="formPagamento"
+    method="POST"
+    class="p-6"
+>
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="{{ csrf_token() }}"
+    >
+
+            <div
+                class="bg-slate-50 rounded-2xl p-4 mb-5"
+            >
+
+                <p class="text-xs text-slate-400">
+                    Valor restante
+                </p>
+
+                <p
+                    id="saldoFornecedorPagamento"
+                    class="text-lg font-bold text-slate-900 mt-1"
+                >
+                </p>
+
+            </div>
+
+
+            <label
+                class="block text-sm font-semibold text-slate-700 mb-2"
+            >
+                Valor do pagamento *
+            </label>
+
+            <input
+                type="text"
+                name="valor_adicional"
+                required
+                placeholder="0,00"
+                inputmode="decimal"
+                class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
+            >
+
+
+            <div
+                class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 mt-6"
+            >
+
+                <button
+                    type="button"
+                    onclick="fecharModalPagamento()"
+                    class="border border-slate-200 hover:bg-slate-50 text-slate-600 px-5 py-3 rounded-2xl text-sm font-semibold transition"
+                >
+                    Cancelar
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="bg-rose-500 hover:bg-rose-600 text-white px-5 py-3 rounded-2xl text-sm font-semibold transition"
+                >
+                    Registrar pagamento
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- ====================================================== -->
+<!-- SCRIPT -->
+<!-- ====================================================== -->
+
+<script>
+
+    // ======================================================
+    // MODAL FORNECEDOR
+    // ======================================================
+
+    const modalFornecedor =
+        document.getElementById("modalFornecedor");
+
+    const overlayFornecedor =
+        document.getElementById("overlayFornecedor");
+
+
+    function abrirModalFornecedor() {
+
+        modalFornecedor.classList.remove("hidden");
+        modalFornecedor.classList.add("flex");
+
+        overlayFornecedor.classList.remove("hidden");
+
+        document.body.classList.add("overflow-hidden");
+
+    }
+
+
+    function fecharModalFornecedor() {
+
+        modalFornecedor.classList.add("hidden");
+        modalFornecedor.classList.remove("flex");
+
+        overlayFornecedor.classList.add("hidden");
+
+        document.body.classList.remove("overflow-hidden");
+
+    }
+
+
+    overlayFornecedor.addEventListener(
+        "click",
+        fecharModalFornecedor
+    );
+
+
+
+    // ======================================================
+    // MODAL CATEGORIAS
+    // ======================================================
+
+    const modalCategorias =
+        document.getElementById("modalCategorias");
+
+    const overlayCategorias =
+        document.getElementById("overlayCategorias");
+
+
+    function abrirModalCategorias() {
+
+        modalCategorias.classList.remove("hidden");
+        modalCategorias.classList.add("flex");
+
+        overlayCategorias.classList.remove("hidden");
+
+        document.body.classList.add("overflow-hidden");
+
+    }
+
+
+    function fecharModalCategorias() {
+
+        modalCategorias.classList.add("hidden");
+        modalCategorias.classList.remove("flex");
+
+        overlayCategorias.classList.add("hidden");
+
+        document.body.classList.remove("overflow-hidden");
+
+    }
+
+
+    overlayCategorias.addEventListener(
+        "click",
+        fecharModalCategorias
+    );
+
+
+
+    // ======================================================
+    // EXCLUIR CATEGORIA
+    // ======================================================
+
+    const modalExcluirCategoria =
+        document.getElementById(
+            "modalExcluirCategoria"
+        );
+
+    const overlayExcluirCategoria =
+        document.getElementById(
+            "overlayExcluirCategoria"
+        );
+
+    const formExcluirCategoria =
+        document.getElementById(
+            "formExcluirCategoria"
+        );
+
+    const nomeCategoriaExcluir =
+        document.getElementById(
+            "nomeCategoriaExcluir"
+        );
+
+
+    function abrirConfirmacaoCategoria(
+        categoriaId,
+        categoriaNome
+    ) {
+
+        formExcluirCategoria.action =
+            "/excluir-categoria-fornecedor/"
+            + categoriaId;
+
+        nomeCategoriaExcluir.textContent =
+            categoriaNome;
+
+        modalExcluirCategoria.classList.remove(
+            "hidden"
+        );
+
+        modalExcluirCategoria.classList.add(
+            "flex"
+        );
+
+        overlayExcluirCategoria.classList.remove(
+            "hidden"
+        );
+
+        document.body.classList.add(
+            "overflow-hidden"
+        );
+
+    }
+
+
+    function fecharConfirmacaoCategoria() {
+
+        modalExcluirCategoria.classList.add(
+            "hidden"
+        );
+
+        modalExcluirCategoria.classList.remove(
+            "flex"
+        );
+
+        overlayExcluirCategoria.classList.add(
+            "hidden"
+        );
+
+        /*
+        O modal de categorias continua aberto.
+        Portanto mantemos o bloqueio de scroll.
+        */
+
+        if (
+            modalCategorias.classList.contains(
+                "hidden"
+            )
+        ) {
+
+            document.body.classList.remove(
+                "overflow-hidden"
+            );
+
+        }
+
+    }
+
+
+    overlayExcluirCategoria.addEventListener(
+        "click",
+        fecharConfirmacaoCategoria
+    );
+
+
+
+    // ======================================================
+    // MODAL PAGAMENTO
+    // ======================================================
+
+    const modalPagamento =
+        document.getElementById("modalPagamento");
+
+    const overlayPagamento =
+        document.getElementById("overlayPagamento");
+
+    const formPagamento =
+        document.getElementById("formPagamento");
+
+    const nomeFornecedorPagamento =
+        document.getElementById(
+            "nomeFornecedorPagamento"
+        );
+
+    const saldoFornecedorPagamento =
+        document.getElementById(
+            "saldoFornecedorPagamento"
+        );
+
+
+    function abrirModalPagamento(
+        fornecedorId,
+        fornecedorNome,
+        saldo
+    ) {
+
+        formPagamento.action =
+            "/acrescentar-pagamento/"
+            + fornecedorId;
+
+        nomeFornecedorPagamento.textContent =
+            fornecedorNome;
+
+        const valorSaldo =
+            Number(saldo || 0);
+
+        saldoFornecedorPagamento.textContent =
+            valorSaldo.toLocaleString(
+                "pt-BR",
+                {
+                    style: "currency",
+                    currency: "BRL"
+                }
+            );
+
+        modalPagamento.classList.remove("hidden");
+        modalPagamento.classList.add("flex");
+
+        overlayPagamento.classList.remove("hidden");
+
+        document.body.classList.add("overflow-hidden");
+
+    }
+
+
+    function fecharModalPagamento() {
+
+        modalPagamento.classList.add("hidden");
+        modalPagamento.classList.remove("flex");
+
+        overlayPagamento.classList.add("hidden");
+
+        document.body.classList.remove("overflow-hidden");
+
+    }
+
+
+    overlayPagamento.addEventListener(
+        "click",
+        fecharModalPagamento
+    );
+
+
+
+    // ======================================================
+    // ESC FECHA MODAIS
+    // ======================================================
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key !== "Escape") {
+                return;
+            }
+
+
+            /*
+            Se a confirmação de exclusão estiver aberta,
+            fechamos somente ela.
+            */
+
+            if (
+                !modalExcluirCategoria.classList.contains(
+                    "hidden"
+                )
+            ) {
+
+                fecharConfirmacaoCategoria();
+
+                return;
+
+            }
+
+
+            if (
+                !modalCategorias.classList.contains(
+                    "hidden"
+                )
+            ) {
+
+                fecharModalCategorias();
+
+                return;
+
+            }
+
+
+            if (
+                !modalFornecedor.classList.contains(
+                    "hidden"
+                )
+            ) {
+
+                fecharModalFornecedor();
+
+                return;
+
+            }
+
+
+            if (
+                !modalPagamento.classList.contains(
+                    "hidden"
+                )
+            ) {
+
+                fecharModalPagamento();
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

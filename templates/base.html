@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Casamento App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-rose-50 text-slate-800">
+  <header class="border-b border-rose-100 bg-white/80 backdrop-blur sticky top-0 z-10">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="{{ url_for('index') }}" class="text-2xl font-bold text-rose-500">Casamento App</a>
+
+      <nav class="flex items-center gap-3 text-sm">
+        <a href="{{ url_for('planos') }}" class="hover:text-rose-500">Planos</a>
+
+        {% if session.get('usuario_id') %}
+          <a href="{{ url_for('dashboard') }}" class="hover:text-rose-500">Dashboard</a>
+          <a href="{{ url_for('logout') }}" class="bg-rose-500 text-white px-4 py-2 rounded-xl hover:bg-rose-600">Sair</a>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="hover:text-rose-500">Login</a>
+          <a href="{{ url_for('cadastro') }}" class="bg-rose-500 text-white px-4 py-2 rounded-xl hover:bg-rose-600">Cadastrar</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="space-y-3 mb-6">
+          {% for categoria, mensagem in messages %}
+            <div class="rounded-2xl px-4 py-3 shadow-sm
+              {% if categoria == 'erro' %}
+                bg-red-50 text-red-700 border border-red-200
+              {% else %}
+                bg-emerald-50 text-emerald-700 border border-emerald-200
+              {% endif %}
+            ">
+              {{ mensagem }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block conteudo %}{% endblock %}
+  </main>
+</body>
+</html>

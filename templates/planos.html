@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planos | Planner de Casamento</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
+
+  <header class="bg-white/90 backdrop-blur-sm shadow-sm border-b border-rose-100">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-gray-800">💍 Planner de Casamento</h1>
+      <div class="flex items-center gap-4">
+        <span class="text-gray-600">Olá, {{ usuario_nome }}</span>
+        <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl text-sm">
+          Sair
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-10">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for categoria, mensagem in messages %}
+          <div class="mb-6 rounded-2xl px-4 py-3 text-sm
+            {% if categoria == 'erro' %}
+              bg-red-100 text-red-700 border border-red-200
+            {% else %}
+              bg-green-100 text-green-700 border border-green-200
+            {% endif %}">
+            {{ mensagem }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="text-center mb-10">
+      <h2 class="text-4xl font-bold text-gray-800">Escolha o plano ideal</h2>
+      <p class="text-gray-500 mt-3">
+        Libere seu acesso ao planner e comece a organizar cada detalhe do grande dia.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <div class="bg-white rounded-3xl shadow-lg border border-rose-100 p-8 flex flex-col">
+        <h3 class="text-2xl font-bold text-gray-800">Básico</h3>
+        <p class="text-gray-500 mt-2">Ideal para começar a organizar.</p>
+
+        <div class="mt-6">
+          <span class="text-4xl font-bold text-rose-500">R$ 19,90</span>
+          <span class="text-gray-500">/mês</span>
+        </div>
+
+        <ul class="mt-6 space-y-3 text-gray-600">
+          <li>✔ Controle de fornecedores</li>
+          <li>✔ Controle de orçamento</li>
+          <li>✔ Atualização de pagamentos</li>
+        </ul>
+
+        <a href="/contratar-plano/basico"
+           class="mt-8 bg-rose-500 hover:bg-rose-600 text-white text-center font-semibold py-3 rounded-2xl shadow-md transition">
+          Contratar Básico
+        </a>
+      </div>
+
+      <div class="bg-white rounded-3xl shadow-2xl border-2 border-rose-400 p-8 flex flex-col relative">
+        <span class="absolute -top-3 right-6 bg-rose-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+          MAIS ESCOLHIDO
+        </span>
+
+        <h3 class="text-2xl font-bold text-gray-800">Premium</h3>
+        <p class="text-gray-500 mt-2">Mais completo para o casal.</p>
+
+        <div class="mt-6">
+          <span class="text-4xl font-bold text-rose-500">R$ 29,90</span>
+          <span class="text-gray-500">/mês</span>
+        </div>
+
+        <ul class="mt-6 space-y-3 text-gray-600">
+          <li>✔ Tudo do Básico</li>
+          <li>✔ Foto do casal</li>
+          <li>✔ Contagem regressiva</li>
+          <li>✔ Mais personalização</li>
+        </ul>
+
+        <a href="/contratar-plano/premium"
+           class="mt-8 bg-rose-500 hover:bg-rose-600 text-white text-center font-semibold py-3 rounded-2xl shadow-md transition">
+          Contratar Premium
+        </a>
+      </div>
+
+      <div class="bg-white rounded-3xl shadow-lg border border-rose-100 p-8 flex flex-col">
+        <h3 class="text-2xl font-bold text-gray-800">Luxo</h3>
+        <p class="text-gray-500 mt-2">Para uma experiência mais completa.</p>
+
+        <div class="mt-6">
+          <span class="text-4xl font-bold text-rose-500">R$ 49,90</span>
+          <span class="text-gray-500">/mês</span>
+        </div>
+
+        <ul class="mt-6 space-y-3 text-gray-600">
+          <li>✔ Tudo do Premium</li>
+          <li>✔ Recursos extras futuros</li>
+          <li>✔ Prioridade em novidades</li>
+        </ul>
+
+        <a href="/contratar-plano/luxo"
+           class="mt-8 bg-rose-500 hover:bg-rose-600 text-white text-center font-semibold py-3 rounded-2xl shadow-md transition">
+          Contratar Luxo
+        </a>
+      </div>
+
+    </div>
+
+    <div class="mt-10 text-center text-sm text-gray-500">
+      No momento, a contratação está em modo de teste. Depois podemos conectar ao Mercado Pago.
+    </div>
+
+  </main>
+
+</body>
+</html>

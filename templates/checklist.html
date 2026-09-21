@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Checklist | Planner de Casamento</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-rose-50 via-white to-pink-50 min-h-screen">
+
+  <!-- HEADER -->
+  <header class="bg-white shadow-sm border-b border-rose-100">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">
+          📋 Checklist do Casamento
+        </h1>
+
+        <p class="text-sm text-gray-500">
+          Organize todas as tarefas para o grande dia 💍
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3">
+
+        <a
+          href="{{ url_for('dashboard') }}"
+          class="bg-rose-100 hover:bg-rose-200 text-rose-600 px-4 py-2 rounded-xl text-sm font-medium transition"
+        >
+          Voltar ao dashboard
+        </a>
+
+        <a
+          href="{{ url_for('logout') }}"
+          class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition"
+        >
+          Sair
+        </a>
+
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- CONTEÚDO -->
+  <main class="max-w-7xl mx-auto px-6 py-8">
+
+    <!-- MENSAGENS -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+      {% if messages %}
+
+        {% for categoria, mensagem in messages %}
+
+          <div class="mb-6 rounded-2xl px-4 py-3 text-sm
+            {% if categoria == 'erro' %}
+              bg-red-100 text-red-700 border border-red-200
+            {% else %}
+              bg-green-100 text-green-700 border border-green-200
+            {% endif %}
+          ">
+
+            {{ mensagem }}
+
+          </div>
+
+        {% endfor %}
+
+      {% endif %}
+
+    {% endwith %}
+
+
+    <!-- RESUMO -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+      <!-- TOTAL -->
+      <div class="bg-white rounded-3xl shadow p-6">
+
+        <h3 class="text-gray-500 text-sm">
+          Total de Tarefas
+        </h3>
+
+        <p class="text-2xl font-bold text-gray-800 mt-1">
+          {{ total }}
+        </p>
+
+      </div>
+
+
+      <!-- CONCLUÍDAS -->
+      <div class="bg-white rounded-3xl shadow p-6">
+
+        <h3 class="text-gray-500 text-sm">
+          Concluídas
+        </h3>
+
+        <p class="text-2xl font-bold text-green-600 mt-1">
+          {{ concluidas }}
+        </p>
+
+      </div>
+
+
+      <!-- PENDENTES -->
+      <div class="bg-white rounded-3xl shadow p-6">
+
+        <h3 class="text-gray-500 text-sm">
+          Pendentes
+        </h3>
+
+        <p class="text-2xl font-bold text-rose-500 mt-1">
+          {{ total - concluidas }}
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- PROGRESSO -->
+    <div class="bg-white rounded-3xl shadow p-6 mb-8">
+
+      <div class="flex items-center justify-between mb-4">
+
+        <h2 class="text-xl font-bold text-gray-800">
+          Progresso do Checklist
+        </h2>
+
+        <span class="text-sm font-semibold text-rose-600">
+          {{ percentual }}%
+        </span>
+
+      </div>
+
+
+      <div class="w-full bg-rose-100 rounded-full h-4 overflow-hidden">
+
+        <div
+          class="bg-rose-500 h-4 rounded-full transition-all duration-300"
+          style="width: {{ percentual }}%;"
+        >
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ADICIONAR TAREFA -->
+    <div class="bg-white rounded-3xl shadow p-6 mb-8">
+
+      <h2 class="text-xl font-bold text-gray-800 mb-4">
+        Adicionar Nova Tarefa
+      </h2>
+
+
+      <form
+        action="{{ url_for('add_tarefa') }}"
+        method="POST"
+        class="grid md:grid-cols-3 gap-4"
+      >
+<input
+    type="hidden"
+    name="csrf_token"
+    value="{{ csrf_token() }}"
+>
+        <input
+          type="text"
+          name="titulo"
+          placeholder="Ex.: Fechar fotógrafo"
+          class="border border-gray-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
+          required
+        >
+
+
+        <select
+          name="categoria"
+          class="border border-gray-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
+        >
+
+          <option value="">
+            Selecione uma categoria
+          </option>
+
+          <option value="Cerimônia">Cerimônia</option>
+          <option value="Recepção">Recepção</option>
+          <option value="Buffet">Buffet</option>
+          <option value="Fotógrafo">Fotógrafo</option>
+          <option value="DJ">DJ</option>
+          <option value="Celebrante">Celebrante</option>
+          <option value="Gerador">Gerador</option>
+          <option value="Decoração">Decoração</option>
+          <option value="Vestido">Vestido</option>
+          <option value="Terno">Terno</option>
+          <option value="Beleza">Beleza</option>
+          <option value="Música">Música</option>
+          <option value="Convidados">Convidados</option>
+          <option value="Documentação">Documentação</option>
+          <option value="Lua de Mel">Lua de Mel</option>
+          <option value="Outros">Outros</option>
+
+        </select>
+
+
+        <button
+          type="submit"
+          class="bg-rose-500 hover:bg-rose-600 text-white rounded-xl p-3 font-semibold shadow-md transition"
+        >
+          + Adicionar tarefa
+        </button>
+
+      </form>
+
+    </div>
+
+
+    <!-- LISTA DE TAREFAS -->
+    <div class="bg-white rounded-3xl shadow p-6">
+
+      <div class="flex items-center justify-between mb-4">
+
+        <h2 class="text-xl font-bold text-gray-800">
+          Minhas Tarefas
+        </h2>
+
+        <span class="text-sm text-gray-500">
+          {{ concluidas }} de {{ total }} concluídas
+        </span>
+
+      </div>
+
+
+      <div class="overflow-x-auto">
+
+        <table class="w-full text-left">
+
+          <thead class="text-gray-500 border-b">
+
+            <tr>
+              <th class="py-3">Tarefa</th>
+              <th class="py-3">Categoria</th>
+              <th class="py-3">Status</th>
+              <th class="py-3">Ações</th>
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            {% for t in tarefas %}
+
+              <tr class="border-b hover:bg-gray-50">
+
+                <!-- TAREFA -->
+                <td class="py-4">
+
+                  <span
+                    class="
+                      {% if t.concluido == 1 %}
+                        line-through text-gray-400
+                      {% else %}
+                        text-gray-800
+                      {% endif %}
+                    "
+                  >
+
+                    {{ t.titulo }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- CATEGORIA -->
+                <td class="py-4">
+
+                  {% if t.categoria %}
+
+                    <span class="bg-rose-100 text-rose-600 px-3 py-1 rounded-xl text-sm">
+                      {{ t.categoria }}
+                    </span>
+
+                  {% else %}
+
+                    <span class="text-gray-400">
+                      Sem categoria
+                    </span>
+
+                  {% endif %}
+
+                </td>
+
+
+                <!-- STATUS -->
+                <td class="py-4">
+
+                  {% if t.concluido == 1 %}
+
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-xl text-sm">
+                      ✓ Concluída
+                    </span>
+
+                  {% else %}
+
+                    <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-xl text-sm">
+                      Pendente
+                    </span>
+
+                  {% endif %}
+
+                </td>
+
+
+                <!-- AÇÕES -->
+                <td class="py-4">
+
+                  <div class="flex items-center gap-3">
+
+                    <!-- CONCLUIR / REABRIR -->
+                    <form
+                      action="{{ url_for('toggle_tarefa', id=t.id) }}"
+                      method="POST"
+                    >
+<input
+    type="hidden"
+    name="csrf_token"
+    value="{{ csrf_token() }}"
+>
+                      <button
+                        type="submit"
+                        class="bg-rose-500 hover:bg-rose-600 text-white px-3 py-2 rounded-xl text-sm font-medium transition"
+                      >
+
+                        {% if t.concluido == 1 %}
+                          Reabrir
+                        {% else %}
+                          Concluir
+                        {% endif %}
+
+                      </button>
+
+                    </form>
+
+
+                    <!-- EXCLUIR -->
+                    <form
+                      action="{{ url_for('excluir_tarefa', id=t.id) }}"
+                      method="POST"
+                      onsubmit="return confirm('Deseja realmente excluir esta tarefa?');"
+                    >
+<input
+    type="hidden"
+    name="csrf_token"
+    value="{{ csrf_token() }}"
+>
+                      <button
+                        type="submit"
+                        class="text-red-500 hover:text-red-700 text-sm font-medium"
+                      >
+                        Excluir
+                      </button>
+
+                    </form>
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+
+            {% else %}
+
+              <tr>
+
+                <td
+                  colspan="4"
+                  class="py-10 text-center text-gray-400"
+                >
+
+                  <p class="text-lg mb-1">
+                    💍
+                  </p>
+
+                  <p>
+                    Você ainda não adicionou nenhuma tarefa ao checklist.
+                  </p>
+
+                  <p class="text-sm mt-1">
+                    Comece adicionando sua primeira tarefa acima.
+                  </p>
+
+                </td>
+
+              </tr>
+
+            {% endfor %}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</body>
+</html>

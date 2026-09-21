@@ -1,84 +1,60 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <title>Organizador de Casamento</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+{% extends "base.html" %}
 
-<body class="bg-light">
+{% block conteudo %}
 
-<div class="container mt-5">
+<div class="text-center mb-5">
 
-  <h1 class="mb-4 text-center">💍 Organizador do Casamento</h1>
+<h1 class="text-4xl font-bold mb-2">
+Organizador de Casamento
+</h1>
 
-  <!-- Resumo -->
-  <div class="card mb-4 shadow">
-    <div class="card-body">
-      <h5>Total Geral: <strong>R$ {{ total_geral }}</strong></h5>
-      <h6>Total Pago: R$ {{ total_pago }}</h6>
-
-      <div class="progress mt-3" style="height: 25px;">
-        <div class="progress-bar bg-success" style="width: {{ progresso }}%;">
-          {{ progresso }}%
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Formulário -->
-  <div class="card mb-4 shadow">
-    <div class="card-body">
-      <form action="/adicionar" method="post" class="row g-2">
-        <div class="col-md-4">
-          <input class="form-control" name="nome" placeholder="Fornecedor" required>
-        </div>
-        <div class="col-md-3">
-          <input class="form-control" type="number" step="0.01" name="total" placeholder="Valor total" required>
-        </div>
-        <div class="col-md-3">
-          <input class="form-control" type="number" step="0.01" name="pago" placeholder="Valor pago" required>
-        </div>
-        <div class="col-md-2 d-grid">
-          <button class="btn btn-primary">Adicionar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Tabela -->
-  <div class="card shadow">
-    <table class="table table-striped mb-0">
-      <thead class="table-dark">
-        <tr>
-          <th>Fornecedor</th>
-          <th>Total</th>
-          <th>Pago</th>
-          <th>Restante</th>
-          <th>Ação</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in orcamento %}
-        <tr>
-          <td>{{ item.nome }}</td>
-          <td>R$ {{ item.total }}</td>
-          <td>
-            <form action="/editar/{{ item.id }}" method="post" class="d-flex gap-2">
-              <input type="number" step="0.01" name="pago" value="{{ item.pago }}" class="form-control">
-          </td>
-          <td>R$ {{ item.total - item.pago }}</td>
-          <td>
-              <button class="btn btn-sm btn-success">Atualizar</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+<p class="text-slate-500">
+Controle fornecedores, orçamento e pagamentos do seu casamento
+</p>
 
 </div>
 
-</body>
-</html>
+
+<div class="grid md:grid-cols-3 gap-6">
+
+<div class="bg-white rounded-3xl shadow-sm p-6 border border-rose-100">
+<h6 class="text-slate-500">Orçamento Total</h6>
+<h4 class="text-2xl font-bold text-rose-500">
+R$ {{ "%.2f"|format(orcamento_total if orcamento_total else 0) }}
+</h4>
+</div>
+
+
+<div class="bg-white rounded-3xl shadow-sm p-6 border border-rose-100">
+<h6 class="text-slate-500">Total Pago</h6>
+<h4 class="text-2xl font-bold text-green-600">
+R$ {{ "%.2f"|format(total_pago if total_pago else 0) }}
+</h4>
+</div>
+
+
+<div class="bg-white rounded-3xl shadow-sm p-6 border border-rose-100">
+<h6 class="text-slate-500">Restante</h6>
+<h4 class="text-2xl font-bold text-blue-600">
+R$ {{ "%.2f"|format(restante if restante else 0) }}
+</h4>
+</div>
+
+</div>
+
+
+<div class="text-center mt-10">
+
+<a href="{{ url_for('login') }}"
+class="bg-rose-500 text-white px-6 py-3 rounded-xl hover:bg-rose-600">
+Entrar
+</a>
+
+<a href="{{ url_for('cadastro') }}"
+class="ml-4 bg-white border border-rose-200 px-6 py-3 rounded-xl hover:border-rose-400">
+Criar conta
+</a>
+
+</div>
+
+{% endblock %}

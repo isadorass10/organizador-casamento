@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Minha conta | Meu Casamento
+    </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+
+<body class="bg-[#F7F7F9] text-slate-800">
+
+<div class="min-h-screen">
+
+
+    <!-- ====================================================== -->
+    <!-- HEADER -->
+    <!-- ====================================================== -->
+
+    <header
+        class="bg-white border-b border-slate-200 sticky top-0 z-30"
+    >
+
+        <div
+            class="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-3"
+        >
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="w-10 h-10 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center transition"
+            >
+                ←
+            </a>
+
+
+            <div>
+
+                <p class="font-bold text-slate-900">
+                    Minha conta
+                </p>
+
+                <p class="text-xs text-slate-400 mt-0.5">
+                    Dados pessoais e segurança
+                </p>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ====================================================== -->
+    <!-- CONTEÚDO -->
+    <!-- ====================================================== -->
+
+    <main
+        class="max-w-4xl mx-auto px-4 sm:px-6 py-8 lg:py-10"
+    >
+
+
+        <!-- FLASH -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for categoria, mensagem in messages %}
+
+                    <div
+                        class="mb-6 rounded-2xl px-5 py-4 text-sm font-medium
+                        {% if categoria == 'erro' %}
+                            bg-red-50 text-red-700 border border-red-100
+                        {% else %}
+                            bg-green-50 text-green-700 border border-green-100
+                        {% endif %}"
+                    >
+                        {{ mensagem }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+
+        <!-- TÍTULO -->
+
+        <div class="mb-8">
+
+            <p
+                class="text-sm font-semibold text-rose-500"
+            >
+                Conta
+            </p>
+
+            <h1
+                class="text-2xl md:text-3xl font-bold text-slate-900 mt-1"
+            >
+                Olá, {{ usuario["nome"] }} 👋
+            </h1>
+
+            <p
+                class="text-sm text-slate-500 mt-2"
+            >
+                Gerencie seus dados de acesso e a segurança da sua conta.
+            </p>
+
+        </div>
+
+
+
+        <!-- ================================================== -->
+        <!-- DADOS -->
+        <!-- ================================================== -->
+
+        <section
+            class="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden"
+        >
+
+            <div
+                class="px-6 py-5 border-b border-slate-100"
+            >
+
+                <h2
+                    class="font-bold text-slate-900"
+                >
+                    Dados da conta
+                </h2>
+
+                <p
+                    class="text-xs text-slate-400 mt-1"
+                >
+                    Informações utilizadas para identificar e acessar sua conta.
+                </p>
+
+            </div>
+
+
+            <form
+                action="{{ url_for('atualizar_conta') }}"
+                method="POST"
+                class="p-6"
+            >
+<input
+    type="hidden"
+    name="csrf_token"
+    value="{{ csrf_token() }}"
+>
+
+                <div>
+
+                    <label
+                        class="block text-sm font-semibold text-slate-700 mb-2"
+                    >
+                        Nome
+                    </label>
+
+                    <input
+                        type="text"
+                        name="nome"
+                        value="{{ usuario['nome'] }}"
+                        required
+                        class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
+                    >
+
+                </div>
+
+
+
+                <div class="mt-5">
+
+                    <label
+                        class="block text-sm font-semibold text-slate-700 mb-2"
+                    >
+                        E-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        value="{{ usuario['email'] }}"
+                        required
+                        class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
+                    >
+
+                    <p
+                        class="text-xs text-slate-400 mt-2"
+                    >
+                        Este será o e-mail utilizado para entrar na plataforma.
+                    </p>
+
+                </div>
+
+
+
+                <div
+                    class="flex justify-end mt-6"
+                >
+
+                    <button
+                        type="submit"
+                        class="w-full sm:w-auto bg-rose-500 hover:bg-rose-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold transition"
+                    >
+                        Salvar alterações
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- ================================================== -->
+        <!-- SENHA -->
+        <!-- ================================================== -->
+
+        <section
+            class="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden mt-6"
+        >
+
+            <div
+                class="px-6 py-5 border-b border-slate-100"
+            >
+
+                <h2
+                    class="font-bold text-slate-900"
+                >
+                    Alterar senha
+                </h2>
+
+                <p
+                    class="text-xs text-slate-400 mt-1"
+                >
+                    Confirme sua senha atual antes de definir uma nova.
+                </p>
+
+            </div>
+
+
+            <form
+                action="{{ url_for('alterar_senha') }}"
+                method="POST"
+                class="p-6"
+            >
+<input
+    type="hidden"
+    name="csrf_token"
+    value="{{ csrf_token() }}"
+>
+
+                <div>
+
+                    <label
+                        class="block text-sm font-semibold text-slate-700 mb-2"
+                    >
+                        Senha atual
+                    </label>
+
+                    <input
+                        type="password"
+                        name="senha_atual"
+                        required
+                        autocomplete="current-password"
+                        class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
+                    >
+
+                </div>
+
+
+
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5"
+                >
+
+                    <div>
+
+                        <label
+                            class="block text-sm font-semibold text-slate-700 mb-2"
+                        >
+                            Nova senha
+                        </label>
+
+                        <input
+                            type="password"
+                            name="nova_senha"
+                            required
+                            minlength="6"
+                            autocomplete="new-password"
+                            class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label
+                            class="block text-sm font-semibold text-slate-700 mb-2"
+                        >
+                            Confirmar nova senha
+                        </label>
+
+                        <input
+                            type="password"
+                            name="confirmar_senha"
+                            required
+                            minlength="6"
+                            autocomplete="new-password"
+                            class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <p
+                    class="text-xs text-slate-400 mt-3"
+                >
+                    A nova senha deve possuir pelo menos 6 caracteres.
+                </p>
+
+
+
+                <div
+                    class="flex justify-end mt-6"
+                >
+
+                    <button
+                        type="submit"
+                        class="w-full sm:w-auto border border-slate-200 hover:bg-slate-50 text-slate-700 px-6 py-3 rounded-2xl text-sm font-semibold transition"
+                    >
+                        Alterar senha
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- ================================================== -->
+        <!-- SESSÃO -->
+        <!-- ================================================== -->
+
+        <section
+            class="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 mt-6"
+        >
+
+            <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+            >
+
+                <div>
+
+                    <h2
+                        class="font-bold text-slate-900"
+                    >
+                        Encerrar sessão
+                    </h2>
+
+                    <p
+                        class="text-xs text-slate-400 mt-1"
+                    >
+                        Você precisará entrar novamente para acessar seu planejamento.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('logout') }}"
+                    class="inline-flex justify-center border border-red-100 bg-red-50 hover:bg-red-100 text-red-600 px-5 py-3 rounded-2xl text-sm font-semibold transition"
+                >
+                    Sair da conta
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <footer
+            class="text-center py-10 text-xs text-slate-400"
+        >
+            Organizando sonhos, um detalhe de cada vez 💕
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

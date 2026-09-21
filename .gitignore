@@ -1,0 +1,9 @@
+.env
+chave-firebase.json
+venv/
+__pycache__/
+*.pyc
+*.db
+dados_producao.sql
+dados_producao_copy.sql
+static/uploads/
