@@ -2,59 +2,556 @@
 
 {% block conteudo %}
 
-<div class="text-center mb-5">
+<!-- HERO -->
+<section class="relative overflow-hidden rounded-[32px] bg-[#F8F1EA] px-6 py-16 md:px-12 md:py-24">
 
-<h1 class="text-4xl font-bold mb-2">
-Organizador de Casamento
-</h1>
+    <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
 
-<p class="text-slate-500">
-Controle fornecedores, orçamento e pagamentos do seu casamento
-</p>
+        <!-- TEXTO -->
+        <div>
+
+            <div class="inline-flex items-center gap-2 bg-white/70 border border-[#E8D6CA]
+                        rounded-full px-4 py-2 text-sm text-[#7B4E3A] mb-6">
+                💍 Seu casamento começa no planejamento
+            </div>
+
+            <h1 class="text-5xl md:text-6xl font-bold leading-tight text-[#4A3027] mb-6">
+                Vai casar?<br>
+                <span class="text-[#B96349]">Preparaí.</span>
+            </h1>
+
+            <p class="text-lg md:text-xl text-[#735F56] leading-relaxed max-w-xl mb-8">
+                Checklist, convidados, fornecedores e financeiro.
+                Todo o planejamento do seu casamento em um só lugar.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+
+                <a href="{{ url_for('cadastro') }}"
+                   class="text-center bg-[#B96349] text-white font-semibold
+                          px-7 py-4 rounded-2xl hover:bg-[#A6533C]
+                          transition shadow-sm">
+                    Começar meu planejamento
+                </a>
+
+                <a href="{{ url_for('login') }}"
+                   class="text-center bg-white text-[#4A3027] font-semibold
+                          px-7 py-4 rounded-2xl border border-[#E5D5CB]
+                          hover:border-[#B96349] transition">
+                    Já tenho uma conta
+                </a>
+
+            </div>
+
+            <p class="mt-5 text-sm text-[#8A756B]">
+                Um único pagamento. Sem mensalidade.
+            </p>
+
+        </div>
+
+
+        <!-- MOCKUP VISUAL -->
+        <div class="relative">
+
+            <div class="absolute -top-8 -right-8 w-40 h-40
+                        bg-[#E8B6A5]/30 rounded-full blur-3xl"></div>
+
+            <div class="relative bg-white rounded-[28px] shadow-xl
+                        border border-[#EADDD5] p-6">
+
+                <div class="flex items-center justify-between mb-6">
+
+                    <div>
+                        <p class="text-sm text-[#9A8378]">
+                            Visão geral
+                        </p>
+
+                        <h3 class="text-xl font-bold text-[#4A3027]">
+                            Nosso casamento 💍
+                        </h3>
+                    </div>
+
+                   <div class="w-10 h-10 rounded-full bg-[#F4E4DC]
+            flex items-center justify-center text-[#B96349]">
+
+    <i data-lucide="heart"
+       class="w-5 h-5"
+       stroke-width="1.8"></i>
 
 </div>
 
+                </div>
 
-<div class="grid md:grid-cols-3 gap-6">
 
-<div class="bg-white rounded-3xl shadow-sm p-6 border border-rose-100">
-<h6 class="text-slate-500">Orçamento Total</h6>
-<h4 class="text-2xl font-bold text-rose-500">
-R$ {{ "%.2f"|format(orcamento_total if orcamento_total else 0) }}
-</h4>
+                <div class="grid grid-cols-2 gap-3 mb-5">
+
+                    <div class="bg-[#FAF5F1] rounded-2xl p-4">
+                        <p class="text-xs text-[#8A756B] mb-1">
+                            Orçamento
+                        </p>
+
+                        <p class="font-bold text-[#4A3027]">
+                            R$ 70.000
+                        </p>
+                    </div>
+
+
+                    <div class="bg-[#FAF5F1] rounded-2xl p-4">
+                        <p class="text-xs text-[#8A756B] mb-1">
+                            Total pago
+                        </p>
+
+                        <p class="font-bold text-[#B96349]">
+                            R$ 32.450
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="bg-[#FAF5F1] rounded-2xl p-5 mb-3">
+
+                    <div class="flex justify-between mb-3">
+
+                        <p class="font-semibold text-[#4A3027]">
+                            Checklist
+                        </p>
+
+                        <span class="text-sm text-[#B96349]">
+                            68%
+                        </span>
+
+                    </div>
+
+                    <div class="h-2 bg-[#EADDD5] rounded-full overflow-hidden">
+
+                        <div class="h-full bg-[#B96349] rounded-full"
+                             style="width:68%">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+<div class="grid grid-cols-3 gap-2">
+
+    <div class="text-center bg-[#FAF5F1] rounded-xl p-3">
+
+        <i data-lucide="users"
+           class="w-5 h-5 mx-auto text-[#B96349] mb-2"
+           stroke-width="1.8"></i>
+
+        <p class="text-xs text-[#735F56]">
+            Convidados
+        </p>
+
+    </div>
+
+
+    <div class="text-center bg-[#FAF5F1] rounded-xl p-3">
+
+        <i data-lucide="handshake"
+           class="w-5 h-5 mx-auto text-[#B96349] mb-2"
+           stroke-width="1.8"></i>
+
+        <p class="text-xs text-[#735F56]">
+            Fornecedores
+        </p>
+
+    </div>
+
+
+    <div class="text-center bg-[#FAF5F1] rounded-xl p-3">
+
+        <i data-lucide="wallet-cards"
+           class="w-5 h-5 mx-auto text-[#B96349] mb-2"
+           stroke-width="1.8"></i>
+
+        <p class="text-xs text-[#735F56]">
+            Financeiro
+        </p>
+
+    </div>
+
 </div>
 
+            </div>
 
-<div class="bg-white rounded-3xl shadow-sm p-6 border border-rose-100">
-<h6 class="text-slate-500">Total Pago</h6>
-<h4 class="text-2xl font-bold text-green-600">
-R$ {{ "%.2f"|format(total_pago if total_pago else 0) }}
-</h4>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- PROBLEMA -->
+<section class="max-w-5xl mx-auto px-6 py-24 text-center">
+
+    <p class="text-sm uppercase tracking-[0.2em] font-semibold
+              text-[#B96349] mb-4">
+        Chega de bagunça
+    </p>
+
+    <h2 class="text-3xl md:text-4xl font-bold text-[#4A3027] mb-6">
+        Casamento já dá trabalho demais.<br>
+        A organização não precisa dar.
+    </h2>
+
+    <p class="text-lg text-[#735F56] max-w-2xl mx-auto leading-relaxed">
+        Planilha de um lado, lista de convidados do outro,
+        pagamentos anotados no celular e informações de fornecedores
+        espalhadas pelo WhatsApp.
+        O Preparaí coloca tudo no mesmo lugar.
+    </p>
+
+</section>
+
+
+
+<!-- FUNCIONALIDADES -->
+<section class="bg-[#F8F1EA] rounded-[32px] px-6 py-20 md:px-12">
+
+    <div class="max-w-6xl mx-auto">
+
+        <div class="text-center mb-14">
+
+            <p class="text-sm uppercase tracking-[0.2em]
+                      font-semibold text-[#B96349] mb-3">
+                Tudo organizado
+            </p>
+
+            <h2 class="text-3xl md:text-4xl font-bold text-[#4A3027]">
+                Tudo que você precisa.<br>
+                No mesmo lugar.
+            </h2>
+
+        </div>
+
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+           {% set funcionalidades = [
+    ('circle-check-big', 'Checklist', 'Acompanhe tudo que precisa ser feito até o grande dia.'),
+    ('users', 'Convidados', 'Organize sua lista e acompanhe seus convidados.'),
+    ('handshake', 'Fornecedores', 'Centralize contratos, valores e informações dos fornecedores.'),
+    ('credit-card', 'Pagamentos', 'Registre pagamentos e saiba exatamente quanto ainda falta pagar.'),
+    ('calendar-days', 'Próximos pagamentos', 'Planeje os próximos vencimentos e não seja pego de surpresa.'),
+    ('wallet-cards', 'Financeiro', 'Tenha uma visão clara do orçamento completo do casamento.')
+    ] %}
+
+            {% for icone, titulo, descricao in funcionalidades %}
+
+            <div class="bg-white rounded-3xl p-6 border border-[#EADDD5]
+                        hover:-translate-y-1 hover:shadow-md transition">
+
+                <div class="w-11 h-11 bg-[#F4E4DC] rounded-2xl
+            flex items-center justify-center mb-5
+            text-[#B96349]">
+
+    <i data-lucide="{{ icone }}"
+       class="w-5 h-5"
+       stroke-width="1.8"></i>
+
 </div>
 
+                <h3 class="text-lg font-bold text-[#4A3027] mb-2">
+                    {{ titulo }}
+                </h3>
 
-<div class="bg-white rounded-3xl shadow-sm p-6 border border-rose-100">
-<h6 class="text-slate-500">Restante</h6>
-<h4 class="text-2xl font-bold text-blue-600">
-R$ {{ "%.2f"|format(restante if restante else 0) }}
-</h4>
-</div>
+                <p class="text-[#7B685F] leading-relaxed">
+                    {{ descricao }}
+                </p>
 
-</div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
 
 
-<div class="text-center mt-10">
 
-<a href="{{ url_for('login') }}"
-class="bg-rose-500 text-white px-6 py-3 rounded-xl hover:bg-rose-600">
-Entrar
-</a>
+<!-- FINANCEIRO -->
+<section class="max-w-6xl mx-auto px-6 py-24">
 
-<a href="{{ url_for('cadastro') }}"
-class="ml-4 bg-white border border-rose-200 px-6 py-3 rounded-xl hover:border-rose-400">
-Criar conta
-</a>
+    <div class="grid lg:grid-cols-2 gap-14 items-center">
 
-</div>
+        <div>
+
+            <p class="text-sm uppercase tracking-[0.2em]
+                      font-semibold text-[#B96349] mb-4">
+                Seu dinheiro sob controle
+            </p>
+
+            <h2 class="text-3xl md:text-4xl font-bold
+                       text-[#4A3027] mb-6">
+                Saiba exatamente para onde está indo o dinheiro do casamento.
+            </h2>
+
+            <p class="text-lg text-[#735F56] leading-relaxed mb-8">
+                Acompanhe tudo o que foi contratado, quanto já foi pago,
+                o que ainda falta e quais pagamentos estão chegando.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-2
+                        text-sm font-medium text-[#6F5144]">
+
+                <span class="bg-[#F8F1EA] px-3 py-2 rounded-xl">
+                    Orçamento
+                </span>
+
+                <span>→</span>
+
+                <span class="bg-[#F8F1EA] px-3 py-2 rounded-xl">
+                    Contratado
+                </span>
+
+                <span>→</span>
+
+                <span class="bg-[#F8F1EA] px-3 py-2 rounded-xl">
+                    Pago
+                </span>
+
+                <span>→</span>
+
+                <span class="bg-[#F8F1EA] px-3 py-2 rounded-xl">
+                    Falta pagar
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="bg-[#4A3027] text-white rounded-[32px] p-8 md:p-10">
+
+            <p class="text-[#E8B6A5] text-sm mb-2">
+                Resumo financeiro
+            </p>
+
+            <h3 class="text-2xl font-bold mb-8">
+                Seu casamento, sem sustos.
+            </h3>
+
+
+            <div class="space-y-5">
+
+                <div class="flex justify-between border-b
+                            border-white/10 pb-4">
+
+                    <span class="text-white/70">
+                        Orçamento planejado
+                    </span>
+
+                    <strong>R$ 70.000</strong>
+
+                </div>
+
+
+                <div class="flex justify-between border-b
+                            border-white/10 pb-4">
+
+                    <span class="text-white/70">
+                        Valor contratado
+                    </span>
+
+                    <strong>R$ 54.800</strong>
+
+                </div>
+
+
+                <div class="flex justify-between border-b
+                            border-white/10 pb-4">
+
+                    <span class="text-white/70">
+                        Total pago
+                    </span>
+
+                    <strong>R$ 32.450</strong>
+
+                </div>
+
+
+                <div class="flex justify-between">
+
+                    <span class="text-white/70">
+                        Falta pagar
+                    </span>
+
+                    <strong class="text-[#F0C6B8]">
+                        R$ 22.350
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- PREÇO -->
+<section class="bg-[#F8F1EA] rounded-[32px] px-6 py-20">
+
+    <div class="max-w-3xl mx-auto text-center">
+
+        <p class="text-sm uppercase tracking-[0.2em]
+                  font-semibold text-[#B96349] mb-4">
+            Simples assim
+        </p>
+
+        <h2 class="text-3xl md:text-4xl font-bold
+                   text-[#4A3027] mb-4">
+            Um pagamento.<br>
+            O casamento inteiro.
+        </h2>
+
+        <p class="text-[#735F56] mb-8">
+            Sem mensalidade e sem precisar renovar no meio do planejamento.
+        </p>
+
+
+        <div class="bg-white max-w-md mx-auto rounded-[28px]
+                    border border-[#E5D5CB] p-8 shadow-sm">
+
+            <p class="text-sm text-[#8A756B] mb-2">
+                Preço especial de lançamento
+            </p>
+
+            <div class="flex justify-center items-end gap-2 mb-2">
+
+                <span class="text-5xl font-bold text-[#4A3027]">
+                    R$ 97,90
+                </span>
+
+            </div>
+
+            <p class="text-[#8A756B] mb-7">
+                pagamento único
+            </p>
+
+
+            <div class="text-left space-y-3 mb-8 text-[#654F45]">
+
+                <p>✓ Checklist completo</p>
+                <p>✓ Gestão de convidados</p>
+                <p>✓ Fornecedores e pagamentos</p>
+                <p>✓ Planejamento financeiro</p>
+                <p>✓ Acesso durante todo o planejamento</p>
+
+            </div>
+
+
+            <a href="{{ url_for('cadastro') }}"
+               class="block bg-[#B96349] text-white font-semibold
+                      px-6 py-4 rounded-2xl hover:bg-[#A6533C]
+                      transition">
+                Começar meu planejamento
+            </a>
+
+            <p class="text-xs text-[#9A8378] mt-4">
+                Acesso até 10 dias após a data do casamento cadastrada.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- FAQ -->
+<section class="max-w-3xl mx-auto px-6 py-24">
+
+    <div class="text-center mb-12">
+
+        <h2 class="text-3xl font-bold text-[#4A3027]">
+            Dúvidas frequentes
+        </h2>
+
+    </div>
+
+
+    <div class="space-y-4">
+
+        <details class="bg-white border border-[#EADDD5]
+                        rounded-2xl p-5">
+
+            <summary class="font-semibold text-[#4A3027] cursor-pointer">
+                O Preparaí cobra mensalidade?
+            </summary>
+
+            <p class="mt-3 text-[#735F56]">
+                Não. O acesso é feito através de um único pagamento.
+            </p>
+
+        </details>
+
+
+        <details class="bg-white border border-[#EADDD5]
+                        rounded-2xl p-5">
+
+            <summary class="font-semibold text-[#4A3027] cursor-pointer">
+                Por quanto tempo posso usar?
+            </summary>
+
+            <p class="mt-3 text-[#735F56]">
+                Durante todo o seu planejamento, até 10 dias após
+                a data do casamento cadastrada.
+            </p>
+
+        </details>
+
+
+        <details class="bg-white border border-[#EADDD5]
+                        rounded-2xl p-5">
+
+            <summary class="font-semibold text-[#4A3027] cursor-pointer">
+                Posso alterar as informações depois?
+            </summary>
+
+            <p class="mt-3 text-[#735F56]">
+                Sim. Você pode atualizar as informações do seu casamento
+                durante o planejamento.
+            </p>
+
+        </details>
+
+    </div>
+
+</section>
+
+
+
+<!-- CTA FINAL -->
+<section class="text-center bg-[#B96349] rounded-[32px]
+                px-6 py-20 text-white mb-10">
+
+    <p class="text-white/70 mb-3">
+        O grande dia começa muito antes do “sim”.
+    </p>
+
+    <h2 class="text-4xl md:text-5xl font-bold mb-7">
+        Vai casar? Preparaí. 💍
+    </h2>
+
+    <a href="{{ url_for('cadastro') }}"
+       class="inline-block bg-white text-[#8E4735]
+              font-semibold px-8 py-4 rounded-2xl
+              hover:scale-[1.02] transition">
+        Começar meu planejamento
+    </a>
+
+</section>
 
 {% endblock %}

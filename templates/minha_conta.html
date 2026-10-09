@@ -1,359 +1,438 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends "base_app.html" %}
 
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Minha conta | Meu Casamento
-    </title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-</head>
+{% block titulo %}
+Minha conta | Preparaí
+{% endblock %}
 
 
-<body class="bg-[#F7F7F9] text-slate-800">
+{% block conteudo %}
 
-<div class="min-h-screen">
+<div class="max-w-5xl mx-auto px-5 md:px-8 py-7 lg:py-10">
 
 
     <!-- ====================================================== -->
-    <!-- HEADER -->
+    <!-- CABEÇALHO -->
     <!-- ====================================================== -->
 
-    <header
-        class="bg-white border-b border-slate-200 sticky top-0 z-30"
-    >
+    <section class="mb-8 pr-0 lg:pr-28">
 
-        <div
-            class="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-3"
-        >
+        <p class="text-sm font-semibold text-[#B96349]">
+            Conta
+        </p>
 
-            <a
-                href="{{ url_for('dashboard') }}"
-                class="w-10 h-10 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center transition"
-            >
-                ←
-            </a>
+        <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-[#4A3027] mt-1">
+            Olá, {{ usuario["nome"] }} 👋
+        </h1>
 
+        <p class="text-sm md:text-base text-[#8A756B] mt-2">
+            Gerencie seus dados de acesso e a segurança da sua conta.
+        </p>
 
-            <div>
-
-                <p class="font-bold text-slate-900">
-                    Minha conta
-                </p>
-
-                <p class="text-xs text-slate-400 mt-0.5">
-                    Dados pessoais e segurança
-                </p>
-
-            </div>
-
-        </div>
-
-    </header>
+    </section>
 
 
 
-    <!-- ====================================================== -->
-    <!-- CONTEÚDO -->
-    <!-- ====================================================== -->
-
-    <main
-        class="max-w-4xl mx-auto px-4 sm:px-6 py-8 lg:py-10"
-    >
+    <div class="space-y-5">
 
 
-        <!-- FLASH -->
+        <!-- ================================================== -->
+        <!-- DADOS DA CONTA -->
+        <!-- ================================================== -->
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
+        <section class="bg-white border border-[#EFE4DE] rounded-3xl overflow-hidden">
 
-            {% if messages %}
 
-                {% for categoria, mensagem in messages %}
+            <div class="px-5 md:px-6 py-5 border-b border-[#F1E8E3]">
 
-                    <div
-                        class="mb-6 rounded-2xl px-5 py-4 text-sm font-medium
-                        {% if categoria == 'erro' %}
-                            bg-red-50 text-red-700 border border-red-100
-                        {% else %}
-                            bg-green-50 text-green-700 border border-green-100
-                        {% endif %}"
-                    >
-                        {{ mensagem }}
+
+                <div class="flex items-center gap-3">
+
+                    <div class="w-10 h-10 rounded-2xl bg-[#F8EDE8] text-[#B96349] flex items-center justify-center">
+
+                        <i
+                            data-lucide="user-round"
+                            class="w-4 h-4"
+                        ></i>
+
                     </div>
 
-                {% endfor %}
 
-            {% endif %}
+                    <div>
 
-        {% endwith %}
+                        <h2 class="font-bold text-[#4A3027]">
+                            Dados da conta
+                        </h2>
 
+                        <p class="text-xs text-[#9A8378] mt-1">
+                            Informações utilizadas para identificar e acessar sua conta.
+                        </p>
 
+                    </div>
 
-        <!-- TÍTULO -->
+                </div>
 
-        <div class="mb-8">
-
-            <p
-                class="text-sm font-semibold text-rose-500"
-            >
-                Conta
-            </p>
-
-            <h1
-                class="text-2xl md:text-3xl font-bold text-slate-900 mt-1"
-            >
-                Olá, {{ usuario["nome"] }} 👋
-            </h1>
-
-            <p
-                class="text-sm text-slate-500 mt-2"
-            >
-                Gerencie seus dados de acesso e a segurança da sua conta.
-            </p>
-
-        </div>
-
-
-
-        <!-- ================================================== -->
-        <!-- DADOS -->
-        <!-- ================================================== -->
-
-        <section
-            class="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden"
-        >
-
-            <div
-                class="px-6 py-5 border-b border-slate-100"
-            >
-
-                <h2
-                    class="font-bold text-slate-900"
-                >
-                    Dados da conta
-                </h2>
-
-                <p
-                    class="text-xs text-slate-400 mt-1"
-                >
-                    Informações utilizadas para identificar e acessar sua conta.
-                </p>
 
             </div>
+
 
 
             <form
                 action="{{ url_for('atualizar_conta') }}"
                 method="POST"
-                class="p-6"
+                class="p-5 md:p-6"
             >
-<input
-    type="hidden"
-    name="csrf_token"
-    value="{{ csrf_token() }}"
->
 
-                <div>
-
-                    <label
-                        class="block text-sm font-semibold text-slate-700 mb-2"
-                    >
-                        Nome
-                    </label>
-
-                    <input
-                        type="text"
-                        name="nome"
-                        value="{{ usuario['nome'] }}"
-                        required
-                        class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
-                    >
-
-                </div>
-
-
-
-                <div class="mt-5">
-
-                    <label
-                        class="block text-sm font-semibold text-slate-700 mb-2"
-                    >
-                        E-mail
-                    </label>
-
-                    <input
-                        type="email"
-                        name="email"
-                        value="{{ usuario['email'] }}"
-                        required
-                        class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
-                    >
-
-                    <p
-                        class="text-xs text-slate-400 mt-2"
-                    >
-                        Este será o e-mail utilizado para entrar na plataforma.
-                    </p>
-
-                </div>
-
-
-
-                <div
-                    class="flex justify-end mt-6"
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
                 >
+
+
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+
+                    <!-- NOME -->
+
+                    <div>
+
+                        <label
+                            for="nome"
+                            class="block text-sm font-semibold text-[#6F5A50] mb-2"
+                        >
+                            Nome
+                        </label>
+
+
+                        <div class="relative">
+
+                            <i
+                                data-lucide="user"
+                                class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#B4A199] pointer-events-none"
+                            ></i>
+
+
+                            <input
+                                id="nome"
+                                type="text"
+                                name="nome"
+                                value="{{ usuario['nome'] }}"
+                                required
+                                autocomplete="name"
+                                class="w-full border border-[#EADDD5] focus:border-[#B96349] focus:ring-4 focus:ring-[#B96349]/10 outline-none rounded-2xl pl-11 pr-4 py-3 text-sm text-[#4A3027] transition"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- EMAIL -->
+
+                    <div>
+
+                        <label
+                            for="email"
+                            class="block text-sm font-semibold text-[#6F5A50] mb-2"
+                        >
+                            E-mail
+                        </label>
+
+
+                        <div class="relative">
+
+                            <i
+                                data-lucide="mail"
+                                class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#B4A199] pointer-events-none"
+                            ></i>
+
+
+                            <input
+                                id="email"
+                                type="email"
+                                name="email"
+                                value="{{ usuario['email'] }}"
+                                required
+                                autocomplete="email"
+                                class="w-full border border-[#EADDD5] focus:border-[#B96349] focus:ring-4 focus:ring-[#B96349]/10 outline-none rounded-2xl pl-11 pr-4 py-3 text-sm text-[#4A3027] transition"
+                            >
+
+                        </div>
+
+
+                        <p class="text-xs text-[#A28E84] mt-2">
+                            Este será o e-mail utilizado para entrar na plataforma.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="flex justify-end mt-6">
 
                     <button
                         type="submit"
-                        class="w-full sm:w-auto bg-rose-500 hover:bg-rose-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold transition"
+                        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#B96349] hover:bg-[#A6533C] text-white px-5 py-3 rounded-2xl text-sm font-semibold transition"
                     >
+
+                        <i
+                            data-lucide="save"
+                            class="w-4 h-4"
+                        ></i>
+
                         Salvar alterações
+
                     </button>
 
                 </div>
 
+
             </form>
+
 
         </section>
 
 
 
         <!-- ================================================== -->
-        <!-- SENHA -->
+        <!-- SEGURANÇA -->
         <!-- ================================================== -->
 
-        <section
-            class="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden mt-6"
-        >
+        <section class="bg-white border border-[#EFE4DE] rounded-3xl overflow-hidden">
 
-            <div
-                class="px-6 py-5 border-b border-slate-100"
-            >
 
-                <h2
-                    class="font-bold text-slate-900"
-                >
-                    Alterar senha
-                </h2>
+            <div class="px-5 md:px-6 py-5 border-b border-[#F1E8E3]">
 
-                <p
-                    class="text-xs text-slate-400 mt-1"
-                >
-                    Confirme sua senha atual antes de definir uma nova.
-                </p>
+
+                <div class="flex items-center gap-3">
+
+                    <div class="w-10 h-10 rounded-2xl bg-[#F8F1ED] text-[#8A756B] flex items-center justify-center">
+
+                        <i
+                            data-lucide="lock-keyhole"
+                            class="w-4 h-4"
+                        ></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h2 class="font-bold text-[#4A3027]">
+                            Segurança
+                        </h2>
+
+                        <p class="text-xs text-[#9A8378] mt-1">
+                            Altere sua senha de acesso à plataforma.
+                        </p>
+
+                    </div>
+
+                </div>
+
 
             </div>
+
 
 
             <form
                 action="{{ url_for('alterar_senha') }}"
                 method="POST"
-                class="p-6"
+                class="p-5 md:p-6"
             >
-<input
-    type="hidden"
-    name="csrf_token"
-    value="{{ csrf_token() }}"
->
+
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
+
+
+                <!-- SENHA ATUAL -->
 
                 <div>
 
                     <label
-                        class="block text-sm font-semibold text-slate-700 mb-2"
+                        for="senha_atual"
+                        class="block text-sm font-semibold text-[#6F5A50] mb-2"
                     >
                         Senha atual
                     </label>
 
-                    <input
-                        type="password"
-                        name="senha_atual"
-                        required
-                        autocomplete="current-password"
-                        class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
-                    >
+
+                    <div class="relative">
+
+                        <input
+                            id="senha_atual"
+                            type="password"
+                            name="senha_atual"
+                            required
+                            autocomplete="current-password"
+                            class="w-full border border-[#EADDD5] focus:border-[#B96349] focus:ring-4 focus:ring-[#B96349]/10 outline-none rounded-2xl px-4 py-3 pr-12 text-sm text-[#4A3027] transition"
+                        >
+
+
+                        <button
+                            type="button"
+                            onclick="alternarSenha('senha_atual', this)"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-[#A28E84] hover:text-[#6F5A50] transition"
+                            aria-label="Mostrar senha"
+                        >
+
+                            <i
+                                data-lucide="eye"
+                                class="w-4 h-4"
+                            ></i>
+
+                        </button>
+
+                    </div>
 
                 </div>
 
 
 
-                <div
-                    class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5"
-                >
+                <!-- NOVA SENHA -->
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+
 
                     <div>
 
                         <label
-                            class="block text-sm font-semibold text-slate-700 mb-2"
+                            for="nova_senha"
+                            class="block text-sm font-semibold text-[#6F5A50] mb-2"
                         >
                             Nova senha
                         </label>
 
-                        <input
-                            type="password"
-                            name="nova_senha"
-                            required
-                            minlength="6"
-                            autocomplete="new-password"
-                            class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
-                        >
+
+                        <div class="relative">
+
+                            <input
+                                id="nova_senha"
+                                type="password"
+                                name="nova_senha"
+                                required
+                                minlength="6"
+                                autocomplete="new-password"
+                                class="w-full border border-[#EADDD5] focus:border-[#B96349] focus:ring-4 focus:ring-[#B96349]/10 outline-none rounded-2xl px-4 py-3 pr-12 text-sm text-[#4A3027] transition"
+                            >
+
+
+                            <button
+                                type="button"
+                                onclick="alternarSenha('nova_senha', this)"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-[#A28E84] hover:text-[#6F5A50] transition"
+                                aria-label="Mostrar senha"
+                            >
+
+                                <i
+                                    data-lucide="eye"
+                                    class="w-4 h-4"
+                                ></i>
+
+                            </button>
+
+                        </div>
 
                     </div>
 
+
+
+                    <!-- CONFIRMAR -->
 
                     <div>
 
                         <label
-                            class="block text-sm font-semibold text-slate-700 mb-2"
+                            for="confirmar_senha"
+                            class="block text-sm font-semibold text-[#6F5A50] mb-2"
                         >
                             Confirmar nova senha
                         </label>
 
-                        <input
-                            type="password"
-                            name="confirmar_senha"
-                            required
-                            minlength="6"
-                            autocomplete="new-password"
-                            class="w-full border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none rounded-2xl px-4 py-3 text-sm transition"
-                        >
+
+                        <div class="relative">
+
+                            <input
+                                id="confirmar_senha"
+                                type="password"
+                                name="confirmar_senha"
+                                required
+                                minlength="6"
+                                autocomplete="new-password"
+                                class="w-full border border-[#EADDD5] focus:border-[#B96349] focus:ring-4 focus:ring-[#B96349]/10 outline-none rounded-2xl px-4 py-3 pr-12 text-sm text-[#4A3027] transition"
+                            >
+
+
+                            <button
+                                type="button"
+                                onclick="alternarSenha('confirmar_senha', this)"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-[#A28E84] hover:text-[#6F5A50] transition"
+                                aria-label="Mostrar senha"
+                            >
+
+                                <i
+                                    data-lucide="eye"
+                                    class="w-4 h-4"
+                                ></i>
+
+                            </button>
+
+                        </div>
 
                     </div>
+
 
                 </div>
 
 
 
-                <p
-                    class="text-xs text-slate-400 mt-3"
-                >
-                    A nova senha deve possuir pelo menos 6 caracteres.
-                </p>
+                <!-- REQUISITO -->
+
+                <div class="flex items-start gap-2 bg-[#FFFCFA] border border-[#F1E8E3] rounded-2xl px-4 py-3 mt-4">
+
+                    <i
+                        data-lucide="shield-check"
+                        class="w-4 h-4 shrink-0 text-[#B96349] mt-0.5"
+                    ></i>
+
+
+                    <p class="text-xs text-[#8A756B]">
+                        A nova senha deve possuir pelo menos 6 caracteres.
+                    </p>
+
+                </div>
 
 
 
-                <div
-                    class="flex justify-end mt-6"
-                >
+                <div class="flex justify-end mt-6">
 
                     <button
                         type="submit"
-                        class="w-full sm:w-auto border border-slate-200 hover:bg-slate-50 text-slate-700 px-6 py-3 rounded-2xl text-sm font-semibold transition"
+                        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-[#E8DCD5] bg-white hover:bg-[#FFFCFA] text-[#6F5A50] px-5 py-3 rounded-2xl text-sm font-semibold transition"
                     >
+
+                        <i
+                            data-lucide="key-round"
+                            class="w-4 h-4"
+                        ></i>
+
                         Alterar senha
+
                     </button>
 
                 </div>
 
+
             </form>
+
 
         </section>
 
@@ -363,53 +442,131 @@
         <!-- SESSÃO -->
         <!-- ================================================== -->
 
-        <section
-            class="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 mt-6"
-        >
+        <section class="bg-white border border-red-100 rounded-3xl p-5 md:p-6">
 
-            <div
-                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-            >
 
-                <div>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
 
-                    <h2
-                        class="font-bold text-slate-900"
-                    >
-                        Encerrar sessão
-                    </h2>
 
-                    <p
-                        class="text-xs text-slate-400 mt-1"
-                    >
-                        Você precisará entrar novamente para acessar seu planejamento.
-                    </p>
+                <div class="flex items-start gap-3">
+
+
+                    <div class="w-10 h-10 shrink-0 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center">
+
+                        <i
+                            data-lucide="log-out"
+                            class="w-4 h-4"
+                        ></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h2 class="font-bold text-[#4A3027]">
+                            Encerrar sessão
+                        </h2>
+
+                        <p class="text-xs text-[#9A8378] mt-1 max-w-lg">
+                            Você precisará entrar novamente para acessar seu planejamento.
+                        </p>
+
+                    </div>
+
 
                 </div>
 
 
+
                 <a
                     href="{{ url_for('logout') }}"
-                    class="inline-flex justify-center border border-red-100 bg-red-50 hover:bg-red-100 text-red-600 px-5 py-3 rounded-2xl text-sm font-semibold transition"
+                    class="inline-flex items-center justify-center gap-2 border border-red-100 bg-red-50 hover:bg-red-100 text-red-600 px-5 py-3 rounded-2xl text-sm font-semibold transition shrink-0"
                 >
+
+                    <i
+                        data-lucide="log-out"
+                        class="w-4 h-4"
+                    ></i>
+
                     Sair da conta
+
                 </a>
 
+
             </div>
+
 
         </section>
 
 
-        <footer
-            class="text-center py-10 text-xs text-slate-400"
-        >
-            Organizando sonhos, um detalhe de cada vez 💕
-        </footer>
+    </div>
 
-    </main>
+
+
+    <!-- ====================================================== -->
+    <!-- RODAPÉ -->
+    <!-- ====================================================== -->
+
+    <footer class="text-center pt-10 pb-3 text-xs text-[#B4A199]">
+        Menos planilhas. Mais momentos. 🤍
+    </footer>
+
 
 </div>
 
-</body>
 
-</html>
+
+<!-- ====================================================== -->
+<!-- MOSTRAR / OCULTAR SENHAS -->
+<!-- ====================================================== -->
+
+<script>
+
+    function alternarSenha(inputId, botao) {
+
+        const input =
+            document.getElementById(inputId);
+
+        if (!input) {
+            return;
+        }
+
+
+        const exibindo =
+            input.type === "text";
+
+
+        input.type =
+            exibindo
+                ? "password"
+                : "text";
+
+
+        botao.innerHTML =
+            exibindo
+                ? '<i data-lucide="eye" class="w-4 h-4"></i>'
+                : '<i data-lucide="eye-off" class="w-4 h-4"></i>';
+
+
+        botao.setAttribute(
+            "aria-label",
+            exibindo
+                ? "Mostrar senha"
+                : "Ocultar senha"
+        );
+
+
+        if (
+            window.lucide &&
+            typeof lucide.createIcons === "function"
+        ) {
+
+            lucide.createIcons();
+
+        }
+
+    }
+
+</script>
+
+{% endblock %}

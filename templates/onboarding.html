@@ -10,113 +10,153 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>
-        Configure seu casamento | Meu Casamento
-    </title>
+    <title>Configure seu casamento | Preparaí</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+
+        body {
+            font-family: "DM Sans", sans-serif;
+        }
+
+    </style>
 
 </head>
 
 
-<body
-    class="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50"
->
+<body class="min-h-screen bg-[#FFFCFA] text-[#4A3027]">
 
 
-<div
-    class="min-h-screen flex items-center justify-center px-4 py-10"
->
-
-    <div class="w-full max-w-2xl">
+<main class="min-h-screen px-5 py-8 md:py-12">
 
 
-        <!-- ================================================== -->
-        <!-- PROGRESSO -->
-        <!-- ================================================== -->
+    <div class="w-full max-w-2xl mx-auto">
 
-        <div class="mb-6">
 
-            <div
-                class="flex items-center justify-between text-xs mb-2"
+        <!-- ====================================================== -->
+        <!-- LOGO -->
+        <!-- ====================================================== -->
+
+        <div class="flex justify-center mb-8">
+
+            <img
+                src="{{ url_for('static', filename='brand/logo-horizontal.png') }}"
+                alt="Preparaí"
+                class="h-10 md:h-11 w-auto object-contain"
             >
-
-                <span
-                    class="font-semibold text-rose-500"
-                >
-                    Configuração inicial
-                </span>
-
-                <span class="text-slate-400">
-                    2 de 2
-                </span>
-
-            </div>
-
-
-            <div
-                class="w-full h-2 bg-white rounded-full overflow-hidden"
-            >
-
-                <div
-                    class="h-full bg-rose-500 rounded-full w-full"
-                ></div>
-
-            </div>
 
         </div>
 
 
 
-        <!-- ================================================== -->
-        <!-- CARD -->
-        <!-- ================================================== -->
+        <!-- ====================================================== -->
+        <!-- PROGRESSO -->
+        <!-- ====================================================== -->
 
-        <div
-            class="bg-white/95 backdrop-blur-sm shadow-2xl rounded-[32px] border border-rose-100 overflow-hidden"
-        >
+        <section class="mb-5">
 
 
-            <!-- HEADER -->
+            <div class="flex items-center justify-between gap-4 mb-2.5">
 
-            <div
-                class="px-6 md:px-8 pt-8 pb-6"
-            >
+                <div class="flex items-center gap-2">
 
-                <div
-                    class="w-12 h-12 rounded-2xl bg-rose-100 flex items-center justify-center text-xl"
-                >
-                    💍
+                    <span class="text-xs font-semibold text-[#B96349]">
+                        Configuração inicial
+                    </span>
+
                 </div>
 
 
-                <p
-                    class="text-sm font-semibold text-rose-500 mt-5"
-                >
-                    Conta criada!
-                </p>
+                <span class="text-xs font-medium text-[#9A8378]">
+                    Última etapa
+                </span>
+
+            </div>
 
 
-                <h1
-                    class="text-2xl md:text-3xl font-bold text-slate-900 mt-1"
-                >
-                    Agora conte um pouco sobre o casamento
-                </h1>
+            <div class="w-full h-1.5 bg-[#F1E8E3] rounded-full overflow-hidden">
+
+                <div class="h-full w-full bg-[#B96349] rounded-full"></div>
+
+            </div>
 
 
-                <p
-                    class="text-sm text-slate-500 mt-3 leading-relaxed"
-                >
-                    Essas informações serão usadas para personalizar
-                    seu planejamento e acompanhar o progresso até o
-                    grande dia.
-                </p>
+        </section>
+
+
+
+        <!-- ====================================================== -->
+        <!-- CARD -->
+        <!-- ====================================================== -->
+
+        <section
+            class="bg-white border border-[#EFE4DE] rounded-[30px] overflow-hidden shadow-[0_20px_60px_rgba(74,48,39,0.06)]"
+        >
+
+
+            <!-- ================================================== -->
+            <!-- CABEÇALHO -->
+            <!-- ================================================== -->
+
+            <div class="px-6 md:px-8 pt-7 md:pt-8 pb-6 border-b border-[#F3EBE7]">
+
+
+                <div class="flex items-start gap-4">
+
+
+                    <div
+                        class="w-11 h-11 shrink-0 rounded-2xl bg-[#F8EDE8] text-[#B96349] flex items-center justify-center"
+                    >
+
+                        <i
+                            data-lucide="sparkles"
+                            class="w-5 h-5"
+                        ></i>
+
+                    </div>
+
+
+
+                    <div>
+
+                        <p class="text-sm font-semibold text-[#B96349]">
+                            Conta criada!
+                        </p>
+
+
+                        <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-[#4A3027] mt-1">
+                            Agora, vamos preparar seu espaço.
+                        </h1>
+
+
+                        <p class="text-sm text-[#8A756B] mt-2 leading-relaxed max-w-xl">
+                            Conte um pouquinho sobre o casamento para personalizarmos seu planejamento desde o início.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
 
             </div>
 
 
 
+            <!-- ================================================== -->
             <!-- FLASH -->
+            <!-- ================================================== -->
 
             <div class="px-6 md:px-8">
 
@@ -124,20 +164,44 @@
 
                     {% if messages %}
 
-                        {% for categoria, mensagem in messages %}
+                        <div class="pt-6">
 
-                            <div
-                                class="mb-5 rounded-2xl px-4 py-3 text-sm font-medium
-                                {% if categoria == 'erro' %}
-                                    bg-red-50 text-red-700 border border-red-100
-                                {% else %}
-                                    bg-green-50 text-green-700 border border-green-100
-                                {% endif %}"
-                            >
-                                {{ mensagem }}
-                            </div>
+                            {% for categoria, mensagem in messages %}
 
-                        {% endfor %}
+                                <div
+                                    class="
+                                        mb-3 rounded-2xl px-4 py-3.5
+                                        flex items-start gap-3
+                                        text-sm
+
+                                        {% if categoria == 'erro' %}
+                                            bg-red-50
+                                            text-red-700
+                                            border
+                                            border-red-100
+                                        {% else %}
+                                            bg-[#EEF5F0]
+                                            text-[#52705B]
+                                            border
+                                            border-[#DDE9E0]
+                                        {% endif %}
+                                    "
+                                >
+
+                                    <i
+                                        data-lucide="{% if categoria == 'erro' %}circle-alert{% else %}circle-check{% endif %}"
+                                        class="w-4 h-4 shrink-0 mt-0.5"
+                                    ></i>
+
+                                    <span>
+                                        {{ mensagem }}
+                                    </span>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
 
                     {% endif %}
 
@@ -148,193 +212,223 @@
 
 
             <!-- ================================================== -->
-            <!-- FORM -->
+            <!-- FORMULÁRIO -->
             <!-- ================================================== -->
 
             <form
                 method="POST"
                 action="{{ url_for('salvar_onboarding') }}"
-                class="px-6 md:px-8 pb-8"
+                class="px-6 md:px-8 py-7"
             >
-            <input
-    type="hidden"
-    name="csrf_token"
-    value="{{ csrf_token() }}"
->
 
-                <!-- VOCÊ -->
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
+
+
+                <!-- ================================================== -->
+                <!-- CASAL -->
+                <!-- ================================================== -->
 
                 <div>
 
-                    <label
-                        class="block text-sm font-semibold text-slate-700 mb-2"
-                    >
-                        Seu nome
-                    </label>
 
+                    <div class="mb-5">
 
-                    <input
-                        type="text"
-                        value="{{ casamento['nome_pessoa_1'] or usuario_nome }}"
-                        disabled
-                        class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-500 text-sm"
-                    >
+                        <h2 class="text-sm font-bold text-[#4A3027]">
+                            Sobre vocês
+                        </h2>
 
-                </div>
-
-
-
-                <!-- OUTRA PESSOA -->
-
-                <div class="mt-5">
-
-                    <label
-                        class="block text-sm font-semibold text-slate-700 mb-2"
-                    >
-                        Nome da outra pessoa *
-                    </label>
-
-
-                    <input
-                        type="text"
-                        name="nome_pessoa_2"
-                        value="{{ casamento['nome_pessoa_2'] or '' }}"
-                        placeholder="Ex.: Júlia"
-                        required
-                        class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 text-sm transition"
-                    >
-
-                </div>
-
-
-
-                <!-- DATA -->
-
-                <div class="mt-5">
-
-                    <label
-                        class="block text-sm font-semibold text-slate-700 mb-2"
-                    >
-                        Data do casamento *
-                    </label>
-
-
-                    <input
-                        type="date"
-                        name="data_casamento"
-                        value="{{ casamento['data_casamento'] or '' }}"
-                        required
-                        class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 text-sm transition"
-                    >
-
-                </div>
-
-
-
-                <!-- LOCAL -->
-
-                <div class="mt-5">
-
-                    <label
-                        class="block text-sm font-semibold text-slate-700 mb-2"
-                    >
-                        Local do casamento
-                    </label>
-
-
-                    <input
-                        type="text"
-                        name="local_casamento"
-                        value="{{ casamento['local_casamento'] or '' }}"
-                        placeholder="Ex.: Espaço Garden"
-                        class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 text-sm transition"
-                    >
-
-                </div>
-
-
-
-                <!-- CIDADE / ESTADO -->
-
-                <div
-                    class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5"
-                >
-
-                    <div class="sm:col-span-2">
-
-                        <label
-                            class="block text-sm font-semibold text-slate-700 mb-2"
-                        >
-                            Cidade
-                        </label>
-
-
-                        <input
-                            type="text"
-                            name="cidade"
-                            value="{{ casamento['cidade'] or '' }}"
-                            placeholder="Ex.: Belo Horizonte"
-                            class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 text-sm transition"
-                        >
+                        <p class="text-xs text-[#9A8378] mt-1">
+                            Como devemos identificar o casal no Preparaí?
+                        </p>
 
                     </div>
 
 
-                    <div>
 
-                        <label
-                            class="block text-sm font-semibold text-slate-700 mb-2"
-                        >
-                            Estado
-                        </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
 
-                        <input
-                            type="text"
-                            name="estado"
-                            value="{{ casamento['estado'] or '' }}"
-                            placeholder="MG"
-                            maxlength="2"
-                            class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white uppercase focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 text-sm transition"
-                        >
+                        <!-- SEU NOME -->
+
+                        <div>
+
+                            <label
+                                class="block text-sm font-semibold text-[#6F5A50] mb-2"
+                            >
+                                Seu nome
+                            </label>
+
+
+                            <div class="relative">
+
+                                <i
+                                    data-lucide="user"
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#B4A199]"
+                                ></i>
+
+
+                                <input
+                                    type="text"
+                                    value="{{ casamento['nome_pessoa_1'] or usuario_nome }}"
+                                    disabled
+                                    class="
+                                        w-full
+                                        pl-11
+                                        pr-4
+                                        py-3.5
+                                        rounded-2xl
+                                        border
+                                        border-[#EEE5E0]
+                                        bg-[#F8F5F3]
+                                        text-[#9A8378]
+                                        text-sm
+                                        cursor-not-allowed
+                                    "
+                                >
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- OUTRA PESSOA -->
+
+                        <div>
+
+                            <label
+                                for="nome_pessoa_2"
+                                class="block text-sm font-semibold text-[#6F5A50] mb-2"
+                            >
+                                Nome da outra pessoa
+                                <span class="text-[#B96349]">*</span>
+                            </label>
+
+
+                            <div class="relative">
+
+                                <i
+                                    data-lucide="heart"
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#B4A199]"
+                                ></i>
+
+
+                                <input
+                                    id="nome_pessoa_2"
+                                    type="text"
+                                    name="nome_pessoa_2"
+                                    value="{{ casamento['nome_pessoa_2'] or '' }}"
+                                    placeholder="Ex.: Júlia"
+                                    required
+                                    autocomplete="off"
+                                    class="
+                                        w-full
+                                        pl-11
+                                        pr-4
+                                        py-3.5
+                                        rounded-2xl
+                                        border
+                                        border-[#EADDD5]
+                                        bg-[#FFFCFA]
+                                        text-sm
+                                        text-[#4A3027]
+                                        placeholder:text-[#B4A199]
+                                        outline-none
+                                        transition
+                                        focus:border-[#B96349]
+                                        focus:ring-4
+                                        focus:ring-[#B96349]/10
+                                    "
+                                >
+
+                            </div>
+
+                        </div>
+
 
                     </div>
+
 
                 </div>
 
 
 
-                <!-- ORÇAMENTO / CONVIDADOS -->
+                <!-- DIVISOR -->
 
-                <div
-                    class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5"
-                >
+                <div class="h-px bg-[#F3EBE7] my-7"></div>
+
+
+
+                <!-- ================================================== -->
+                <!-- GRANDE DIA -->
+                <!-- ================================================== -->
+
+                <div>
+
+
+                    <div class="mb-5">
+
+                        <h2 class="text-sm font-bold text-[#4A3027]">
+                            Sobre o grande dia
+                        </h2>
+
+                        <p class="text-xs text-[#9A8378] mt-1">
+                            Comece com o que vocês já sabem.
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- DATA -->
 
                     <div>
 
                         <label
-                            class="block text-sm font-semibold text-slate-700 mb-2"
+                            for="data_casamento"
+                            class="block text-sm font-semibold text-[#6F5A50] mb-2"
                         >
-                            Orçamento planejado
+                            Data do casamento
+                            <span class="text-[#B96349]">*</span>
                         </label>
 
 
                         <div class="relative">
 
-                            <span
-                                class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400"
-                            >
-                                R$
-                            </span>
+                            <i
+                                data-lucide="calendar-days"
+                                class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#B4A199] pointer-events-none"
+                            ></i>
 
 
                             <input
-                                type="text"
-                                name="orcamento_planejado"
-                                value="{% if casamento['orcamento_planejado'] %}{{ casamento['orcamento_planejado'] | moeda_brl }}{% endif %}"
-                                placeholder="0,00"
-                                inputmode="decimal"
-                                class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 text-sm transition"
+                                id="data_casamento"
+                                type="date"
+                                name="data_casamento"
+                                value="{{ casamento['data_casamento'] or '' }}"
+                                required
+                                class="
+                                    w-full
+                                    pl-11
+                                    pr-4
+                                    py-3.5
+                                    rounded-2xl
+                                    border
+                                    border-[#EADDD5]
+                                    bg-[#FFFCFA]
+                                    text-sm
+                                    text-[#4A3027]
+                                    outline-none
+                                    transition
+                                    focus:border-[#B96349]
+                                    focus:ring-4
+                                    focus:ring-[#B96349]/10
+                                "
                             >
 
                         </div>
@@ -342,72 +436,418 @@
                     </div>
 
 
-                    <div>
+
+                    <!-- LOCAL -->
+
+                    <div class="mt-5">
 
                         <label
-                            class="block text-sm font-semibold text-slate-700 mb-2"
+                            for="local_casamento"
+                            class="block text-sm font-semibold text-[#6F5A50] mb-2"
                         >
-                            Convidados estimados
+                            Local do casamento
                         </label>
 
 
-                        <input
-                            type="number"
-                            name="convidados_estimados"
-                            value="{{ casamento['convidados_estimados'] or '' }}"
-                            placeholder="Ex.: 150"
-                            min="0"
-                            class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 text-sm transition"
-                        >
+                        <div class="relative">
+
+                            <i
+                                data-lucide="map-pin"
+                                class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#B4A199] pointer-events-none"
+                            ></i>
+
+
+                            <input
+                                id="local_casamento"
+                                type="text"
+                                name="local_casamento"
+                                value="{{ casamento['local_casamento'] or '' }}"
+                                placeholder="Ex.: Espaço Garden"
+                                class="
+                                    w-full
+                                    pl-11
+                                    pr-4
+                                    py-3.5
+                                    rounded-2xl
+                                    border
+                                    border-[#EADDD5]
+                                    bg-[#FFFCFA]
+                                    text-sm
+                                    text-[#4A3027]
+                                    placeholder:text-[#B4A199]
+                                    outline-none
+                                    transition
+                                    focus:border-[#B96349]
+                                    focus:ring-4
+                                    focus:ring-[#B96349]/10
+                                "
+                            >
+
+                        </div>
 
                     </div>
 
+
+
+                    <!-- CIDADE / ESTADO -->
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5">
+
+
+                        <div class="sm:col-span-2">
+
+                            <label
+                                for="cidade"
+                                class="block text-sm font-semibold text-[#6F5A50] mb-2"
+                            >
+                                Cidade
+                            </label>
+
+
+                            <input
+                                id="cidade"
+                                type="text"
+                                name="cidade"
+                                value="{{ casamento['cidade'] or '' }}"
+                                placeholder="Ex.: Belo Horizonte"
+                                class="
+                                    w-full
+                                    px-4
+                                    py-3.5
+                                    rounded-2xl
+                                    border
+                                    border-[#EADDD5]
+                                    bg-[#FFFCFA]
+                                    text-sm
+                                    text-[#4A3027]
+                                    placeholder:text-[#B4A199]
+                                    outline-none
+                                    transition
+                                    focus:border-[#B96349]
+                                    focus:ring-4
+                                    focus:ring-[#B96349]/10
+                                "
+                            >
+
+                        </div>
+
+
+
+                        <div>
+
+                            <label
+                                for="estado"
+                                class="block text-sm font-semibold text-[#6F5A50] mb-2"
+                            >
+                                Estado
+                            </label>
+
+
+                            <input
+                                id="estado"
+                                type="text"
+                                name="estado"
+                                value="{{ casamento['estado'] or '' }}"
+                                placeholder="MG"
+                                maxlength="2"
+                                autocomplete="address-level1"
+                                class="
+                                    w-full
+                                    px-4
+                                    py-3.5
+                                    rounded-2xl
+                                    border
+                                    border-[#EADDD5]
+                                    bg-[#FFFCFA]
+                                    text-sm
+                                    text-[#4A3027]
+                                    uppercase
+                                    placeholder:text-[#B4A199]
+                                    outline-none
+                                    transition
+                                    focus:border-[#B96349]
+                                    focus:ring-4
+                                    focus:ring-[#B96349]/10
+                                "
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
                 </div>
 
 
 
-                <!-- INFORMAÇÃO -->
+                <!-- DIVISOR -->
+
+                <div class="h-px bg-[#F3EBE7] my-7"></div>
+
+
+
+                <!-- ================================================== -->
+                <!-- PLANEJAMENTO -->
+                <!-- ================================================== -->
+
+                <div>
+
+
+                    <div class="mb-5">
+
+                        <h2 class="text-sm font-bold text-[#4A3027]">
+                            Primeiras estimativas
+                        </h2>
+
+                        <p class="text-xs text-[#9A8378] mt-1">
+                            Não precisa estar perfeito agora. É só um ponto de partida.
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+
+                        <!-- ORÇAMENTO -->
+
+                        <div>
+
+                            <label
+                                for="orcamento_planejado"
+                                class="block text-sm font-semibold text-[#6F5A50] mb-2"
+                            >
+                                Orçamento planejado
+                            </label>
+
+
+                            <div class="relative">
+
+                                <span
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-[#9A8378]"
+                                >
+                                    R$
+                                </span>
+
+
+                                <input
+                                    id="orcamento_planejado"
+                                    type="text"
+                                    name="orcamento_planejado"
+                                    value="{% if casamento['orcamento_planejado'] %}{{ casamento['orcamento_planejado'] | moeda_brl }}{% endif %}"
+                                    placeholder="0,00"
+                                    inputmode="decimal"
+                                    class="
+                                        w-full
+                                        pl-11
+                                        pr-4
+                                        py-3.5
+                                        rounded-2xl
+                                        border
+                                        border-[#EADDD5]
+                                        bg-[#FFFCFA]
+                                        text-sm
+                                        text-[#4A3027]
+                                        placeholder:text-[#B4A199]
+                                        outline-none
+                                        transition
+                                        focus:border-[#B96349]
+                                        focus:ring-4
+                                        focus:ring-[#B96349]/10
+                                    "
+                                >
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- CONVIDADOS -->
+
+                        <div>
+
+                            <label
+                                for="convidados_estimados"
+                                class="block text-sm font-semibold text-[#6F5A50] mb-2"
+                            >
+                                Convidados estimados
+                            </label>
+
+
+                            <div class="relative">
+
+                                <i
+                                    data-lucide="users"
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#B4A199] pointer-events-none"
+                                ></i>
+
+
+                                <input
+                                    id="convidados_estimados"
+                                    type="number"
+                                    name="convidados_estimados"
+                                    value="{{ casamento['convidados_estimados'] or '' }}"
+                                    placeholder="Ex.: 150"
+                                    min="0"
+                                    inputmode="numeric"
+                                    class="
+                                        w-full
+                                        pl-11
+                                        pr-4
+                                        py-3.5
+                                        rounded-2xl
+                                        border
+                                        border-[#EADDD5]
+                                        bg-[#FFFCFA]
+                                        text-sm
+                                        text-[#4A3027]
+                                        placeholder:text-[#B4A199]
+                                        outline-none
+                                        transition
+                                        focus:border-[#B96349]
+                                        focus:ring-4
+                                        focus:ring-[#B96349]/10
+                                    "
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ================================================== -->
+                <!-- AVISO -->
+                <!-- ================================================== -->
 
                 <div
-                    class="bg-rose-50 border border-rose-100 rounded-2xl p-4 mt-6"
+                    class="flex items-start gap-3 bg-[#F8EDE8] border border-[#F0DDD4] rounded-2xl p-4 mt-7"
                 >
 
-                    <p
-                        class="text-xs text-rose-600 leading-relaxed"
+                    <div
+                        class="w-8 h-8 shrink-0 rounded-xl bg-white/70 text-[#B96349] flex items-center justify-center"
                     >
-                        💡 Não precisa ter tudo definido agora.
-                        Local, orçamento e quantidade de convidados
-                        poderão ser alterados depois.
-                    </p>
+
+                        <i
+                            data-lucide="pencil-line"
+                            class="w-4 h-4"
+                        ></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <p class="text-sm font-semibold text-[#6F493D]">
+                            Nada disso precisa estar fechado agora.
+                        </p>
+
+                        <p class="text-xs text-[#8A675C] leading-relaxed mt-1">
+                            Local, orçamento e quantidade de convidados poderão ser alterados depois.
+                        </p>
+
+                    </div>
+
 
                 </div>
 
 
 
+                <!-- ================================================== -->
                 <!-- BOTÃO -->
+                <!-- ================================================== -->
 
                 <button
                     type="submit"
-                    class="w-full bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3.5 rounded-2xl shadow-lg shadow-rose-200 transition mt-7"
+                    class="
+                        w-full
+                        inline-flex
+                        items-center
+                        justify-center
+                        gap-2
+                        bg-[#B96349]
+                        hover:bg-[#A6533C]
+                        text-white
+                        font-semibold
+                        py-3.5
+                        rounded-2xl
+                        transition
+                        shadow-[0_10px_25px_rgba(185,99,73,0.20)]
+                        mt-7
+                    "
                 >
-                    Começar meu planejamento →
+
+                    Começar meu planejamento
+
+                    <i
+                        data-lucide="arrow-right"
+                        class="w-4 h-4"
+                    ></i>
+
                 </button>
 
 
             </form>
 
-        </div>
+
+        </section>
 
 
-        <p
-            class="text-center text-xs text-slate-400 mt-5"
-        >
+
+        <!-- ====================================================== -->
+        <!-- RODAPÉ -->
+        <!-- ====================================================== -->
+
+        <p class="text-center text-xs text-[#B4A199] mt-6">
             Você poderá alterar essas informações quando quiser.
         </p>
 
+
     </div>
 
-</div>
+
+</main>
+
+
+
+<script>
+
+    lucide.createIcons();
+
+
+    /* Estado sempre em maiúsculo */
+
+    const estado =
+        document.getElementById("estado");
+
+
+    if (estado) {
+
+        estado.addEventListener(
+            "input",
+            function() {
+
+                this.value =
+                    this.value
+                        .toUpperCase()
+                        .replace(/[^A-Z]/g, "")
+                        .slice(0, 2);
+
+            }
+        );
+
+    }
+
+</script>
 
 
 </body>

@@ -1,417 +1,589 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base_app.html" %}
 
-  <title>Checklist | Planner de Casamento</title>
+{% block titulo %}
+Checklist | Preparaí
+{% endblock %}
 
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
 
-<body class="bg-gradient-to-br from-rose-50 via-white to-pink-50 min-h-screen">
+{% block conteudo %}
 
-  <!-- HEADER -->
-  <header class="bg-white shadow-sm border-b border-rose-100">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+<div class="max-w-6xl mx-auto px-5 md:px-8 xl:px-10 py-7 lg:py-10">
 
-      <div>
-        <h1 class="text-2xl font-bold text-gray-800">
-          📋 Checklist do Casamento
-        </h1>
 
-        <p class="text-sm text-gray-500">
-          Organize todas as tarefas para o grande dia 💍
+    <!-- CABEÇALHO -->
+    <section class="mb-8 pr-0 lg:pr-28">
+
+        <p class="text-sm font-semibold text-[#B96349]">
+            Planejamento
         </p>
-      </div>
 
-      <div class="flex items-center gap-3">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
 
-        <a
-          href="{{ url_for('dashboard') }}"
-          class="bg-rose-100 hover:bg-rose-200 text-rose-600 px-4 py-2 rounded-xl text-sm font-medium transition"
-        >
-          Voltar ao dashboard
-        </a>
+            <div>
+                <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-[#4A3027] mt-1">
+                    Checklist
+                </h1>
 
-        <a
-          href="{{ url_for('logout') }}"
-          class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition"
-        >
-          Sair
-        </a>
+                <p class="text-sm md:text-base text-[#8A756B] mt-2">
+                    Organize tudo o que precisa ser feito até o grande dia.
+                </p>
+            </div>
 
-      </div>
+            {% if total > 0 %}
+                <div class="flex items-center gap-2 text-sm text-[#8A756B]">
+                    <i data-lucide="circle-check-big" class="w-4 h-4 text-[#B96349]"></i>
 
-    </div>
-  </header>
-
-
-  <!-- CONTEÚDO -->
-  <main class="max-w-7xl mx-auto px-6 py-8">
-
-    <!-- MENSAGENS -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-
-      {% if messages %}
-
-        {% for categoria, mensagem in messages %}
-
-          <div class="mb-6 rounded-2xl px-4 py-3 text-sm
-            {% if categoria == 'erro' %}
-              bg-red-100 text-red-700 border border-red-200
-            {% else %}
-              bg-green-100 text-green-700 border border-green-200
+                    <span>
+                        <strong class="text-[#4A3027]">{{ concluidas }}</strong>
+                        de {{ total }} concluídas
+                    </span>
+                </div>
             {% endif %}
-          ">
 
-            {{ mensagem }}
+        </div>
 
-          </div>
+    </section>
 
-        {% endfor %}
-
-      {% endif %}
-
-    {% endwith %}
 
 
     <!-- RESUMO -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
 
-      <!-- TOTAL -->
-      <div class="bg-white rounded-3xl shadow p-6">
+        <!-- TOTAL -->
+        <div class="bg-white border border-[#EFE4DE] rounded-3xl p-5">
 
-        <h3 class="text-gray-500 text-sm">
-          Total de Tarefas
-        </h3>
+            <div class="flex items-start justify-between gap-4">
 
-        <p class="text-2xl font-bold text-gray-800 mt-1">
-          {{ total }}
-        </p>
+                <div>
+                    <p class="text-sm text-[#8A756B]">
+                        Total de tarefas
+                    </p>
 
-      </div>
+                    <p class="text-3xl font-bold text-[#4A3027] mt-2">
+                        {{ total }}
+                    </p>
+                </div>
 
+                <div class="w-10 h-10 rounded-2xl bg-[#F8F1ED] text-[#B96349] flex items-center justify-center">
+                    <i data-lucide="list-todo" class="w-[18px] h-[18px]"></i>
+                </div>
 
-      <!-- CONCLUÍDAS -->
-      <div class="bg-white rounded-3xl shadow p-6">
+            </div>
 
-        <h3 class="text-gray-500 text-sm">
-          Concluídas
-        </h3>
-
-        <p class="text-2xl font-bold text-green-600 mt-1">
-          {{ concluidas }}
-        </p>
-
-      </div>
+        </div>
 
 
-      <!-- PENDENTES -->
-      <div class="bg-white rounded-3xl shadow p-6">
+        <!-- CONCLUÍDAS -->
+        <div class="bg-white border border-[#DDE9E0] rounded-3xl p-5">
 
-        <h3 class="text-gray-500 text-sm">
-          Pendentes
-        </h3>
+            <div class="flex items-start justify-between gap-4">
 
-        <p class="text-2xl font-bold text-rose-500 mt-1">
-          {{ total - concluidas }}
-        </p>
+                <div>
+                    <p class="text-sm text-[#8A756B]">
+                        Concluídas
+                    </p>
 
-      </div>
+                    <p class="text-3xl font-bold text-[#52705B] mt-2">
+                        {{ concluidas }}
+                    </p>
+                </div>
 
-    </div>
+                <div class="w-10 h-10 rounded-2xl bg-[#EEF5F0] text-[#52705B] flex items-center justify-center">
+                    <i data-lucide="circle-check" class="w-[18px] h-[18px]"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PENDENTES -->
+        <div class="bg-white border border-[#F0DDD4] rounded-3xl p-5">
+
+            <div class="flex items-start justify-between gap-4">
+
+                <div>
+                    <p class="text-sm text-[#8A756B]">
+                        Pendentes
+                    </p>
+
+                    <p class="text-3xl font-bold text-[#B96349] mt-2">
+                        {{ total - concluidas }}
+                    </p>
+                </div>
+
+                <div class="w-10 h-10 rounded-2xl bg-[#F8EDE8] text-[#B96349] flex items-center justify-center">
+                    <i data-lucide="clock-3" class="w-[18px] h-[18px]"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
 
 
     <!-- PROGRESSO -->
-    <div class="bg-white rounded-3xl shadow p-6 mb-8">
+    <section class="bg-[#F8F1ED] rounded-3xl p-5 md:p-6 mb-7">
 
-      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center justify-between gap-4 mb-4">
 
-        <h2 class="text-xl font-bold text-gray-800">
-          Progresso do Checklist
-        </h2>
+            <div>
+                <p class="font-bold text-[#4A3027]">
+                    Progresso do checklist
+                </p>
 
-        <span class="text-sm font-semibold text-rose-600">
-          {{ percentual }}%
-        </span>
+                <p class="text-xs text-[#9A8378] mt-1">
+                    Cada tarefa concluída é uma preocupação a menos.
+                </p>
+            </div>
 
-      </div>
+            <div class="shrink-0 text-right">
+                <span class="text-2xl font-bold text-[#B96349]">
+                    {{ percentual }}%
+                </span>
+            </div>
 
-
-      <div class="w-full bg-rose-100 rounded-full h-4 overflow-hidden">
-
-        <div
-          class="bg-rose-500 h-4 rounded-full transition-all duration-300"
-          style="width: {{ percentual }}%;"
-        >
         </div>
 
-      </div>
 
-    </div>
+        <div class="w-full bg-white h-2.5 rounded-full overflow-hidden">
+
+            <div
+                class="bg-[#B96349] h-2.5 rounded-full transition-all duration-300"
+                style="width: {{ percentual }}%;"
+            ></div>
+
+        </div>
+
+    </section>
+
 
 
     <!-- ADICIONAR TAREFA -->
-    <div class="bg-white rounded-3xl shadow p-6 mb-8">
+    <section class="bg-white border border-[#EFE4DE] rounded-3xl p-6 md:p-7 mb-7">
 
-      <h2 class="text-xl font-bold text-gray-800 mb-4">
-        Adicionar Nova Tarefa
-      </h2>
+        <div class="flex items-start gap-4 mb-6">
+
+            <div class="w-11 h-11 shrink-0 rounded-2xl bg-[#F8EDE8] text-[#B96349] flex items-center justify-center">
+                <i data-lucide="plus" class="w-5 h-5"></i>
+            </div>
+
+            <div>
+                <h2 class="text-lg font-bold text-[#4A3027]">
+                    Adicionar tarefa
+                </h2>
+
+                <p class="text-sm text-[#9A8378] mt-1">
+                    Inclua uma nova atividade no planejamento.
+                </p>
+            </div>
+
+        </div>
 
 
-      <form
-        action="{{ url_for('add_tarefa') }}"
-        method="POST"
-        class="grid md:grid-cols-3 gap-4"
-      >
-<input
-    type="hidden"
-    name="csrf_token"
-    value="{{ csrf_token() }}"
->
-        <input
-          type="text"
-          name="titulo"
-          placeholder="Ex.: Fechar fotógrafo"
-          class="border border-gray-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
-          required
+        <form
+            action="{{ url_for('add_tarefa') }}"
+            method="POST"
+            class="grid grid-cols-1 md:grid-cols-[1fr_260px_auto] gap-3"
         >
 
-
-        <select
-          name="categoria"
-          class="border border-gray-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
-        >
-
-          <option value="">
-            Selecione uma categoria
-          </option>
-
-          <option value="Cerimônia">Cerimônia</option>
-          <option value="Recepção">Recepção</option>
-          <option value="Buffet">Buffet</option>
-          <option value="Fotógrafo">Fotógrafo</option>
-          <option value="DJ">DJ</option>
-          <option value="Celebrante">Celebrante</option>
-          <option value="Gerador">Gerador</option>
-          <option value="Decoração">Decoração</option>
-          <option value="Vestido">Vestido</option>
-          <option value="Terno">Terno</option>
-          <option value="Beleza">Beleza</option>
-          <option value="Música">Música</option>
-          <option value="Convidados">Convidados</option>
-          <option value="Documentação">Documentação</option>
-          <option value="Lua de Mel">Lua de Mel</option>
-          <option value="Outros">Outros</option>
-
-        </select>
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
 
 
-        <button
-          type="submit"
-          class="bg-rose-500 hover:bg-rose-600 text-white rounded-xl p-3 font-semibold shadow-md transition"
-        >
-          + Adicionar tarefa
-        </button>
+            <!-- TÍTULO -->
+            <input
+                type="text"
+                name="titulo"
+                placeholder="Ex.: Fechar fotógrafo"
+                required
 
-      </form>
-
-    </div>
-
-
-    <!-- LISTA DE TAREFAS -->
-    <div class="bg-white rounded-3xl shadow p-6">
-
-      <div class="flex items-center justify-between mb-4">
-
-        <h2 class="text-xl font-bold text-gray-800">
-          Minhas Tarefas
-        </h2>
-
-        <span class="text-sm text-gray-500">
-          {{ concluidas }} de {{ total }} concluídas
-        </span>
-
-      </div>
+                class="w-full
+                       bg-white
+                       border border-[#EADDD5]
+                       rounded-2xl
+                       px-4 py-3.5
+                       text-sm
+                       text-[#4A3027]
+                       placeholder:text-[#C1B1A9]
+                       outline-none
+                       focus:border-[#B96349]
+                       focus:ring-4
+                       focus:ring-[#B96349]/10
+                       transition"
+            >
 
 
-      <div class="overflow-x-auto">
+            <!-- CATEGORIA -->
+            <select
+                name="categoria"
 
-        <table class="w-full text-left">
+                class="w-full
+                       bg-white
+                       border border-[#EADDD5]
+                       rounded-2xl
+                       px-4 py-3.5
+                       text-sm
+                       text-[#6F5A50]
+                       outline-none
+                       focus:border-[#B96349]
+                       focus:ring-4
+                       focus:ring-[#B96349]/10
+                       transition"
+            >
 
-          <thead class="text-gray-500 border-b">
+                <option value="">
+                    Categoria
+                </option>
 
-            <tr>
-              <th class="py-3">Tarefa</th>
-              <th class="py-3">Categoria</th>
-              <th class="py-3">Status</th>
-              <th class="py-3">Ações</th>
-            </tr>
+                <option value="Cerimônia">Cerimônia</option>
+                <option value="Recepção">Recepção</option>
+                <option value="Buffet">Buffet</option>
+                <option value="Fotógrafo">Fotógrafo</option>
+                <option value="DJ">DJ</option>
+                <option value="Celebrante">Celebrante</option>
+                <option value="Gerador">Gerador</option>
+                <option value="Decoração">Decoração</option>
+                <option value="Vestido">Vestido</option>
+                <option value="Terno">Terno</option>
+                <option value="Beleza">Beleza</option>
+                <option value="Música">Música</option>
+                <option value="Convidados">Convidados</option>
+                <option value="Documentação">Documentação</option>
+                <option value="Lua de Mel">Lua de Mel</option>
+                <option value="Outros">Outros</option>
 
-          </thead>
-
-
-          <tbody>
-
-            {% for t in tarefas %}
-
-              <tr class="border-b hover:bg-gray-50">
-
-                <!-- TAREFA -->
-                <td class="py-4">
-
-                  <span
-                    class="
-                      {% if t.concluido == 1 %}
-                        line-through text-gray-400
-                      {% else %}
-                        text-gray-800
-                      {% endif %}
-                    "
-                  >
-
-                    {{ t.titulo }}
-
-                  </span>
-
-                </td>
+            </select>
 
 
-                <!-- CATEGORIA -->
-                <td class="py-4">
+            <!-- ADICIONAR -->
+            <button
+                type="submit"
 
-                  {% if t.categoria %}
+                class="inline-flex
+                       items-center justify-center
+                       gap-2
+                       bg-[#B96349]
+                       hover:bg-[#A6533C]
+                       text-white
+                       rounded-2xl
+                       px-5 py-3.5
+                       text-sm
+                       font-semibold
+                       whitespace-nowrap
+                       transition"
+            >
 
-                    <span class="bg-rose-100 text-rose-600 px-3 py-1 rounded-xl text-sm">
-                      {{ t.categoria }}
+                <i data-lucide="plus" class="w-4 h-4"></i>
+
+                Adicionar
+
+            </button>
+
+        </form>
+
+    </section>
+
+
+
+    <!-- LISTA -->
+    <section class="bg-white border border-[#EFE4DE] rounded-3xl overflow-hidden">
+
+        <!-- CABEÇALHO -->
+        <div class="px-6 md:px-7 py-5 border-b border-[#F1E8E3]">
+
+            <div class="flex items-center justify-between gap-4">
+
+                <div>
+                    <h2 class="text-lg font-bold text-[#4A3027]">
+                        Minhas tarefas
+                    </h2>
+
+                    <p class="text-sm text-[#9A8378] mt-1">
+                        Acompanhe o que já foi feito e o que ainda falta.
+                    </p>
+                </div>
+
+                {% if total > 0 %}
+                    <span class="hidden sm:inline-flex bg-[#F8F1ED] text-[#8A756B] rounded-full px-3 py-1.5 text-xs font-semibold">
+                        {{ total }} tarefas
                     </span>
+                {% endif %}
 
-                  {% else %}
+            </div>
 
-                    <span class="text-gray-400">
-                      Sem categoria
-                    </span>
-
-                  {% endif %}
-
-                </td>
+        </div>
 
 
-                <!-- STATUS -->
-                <td class="py-4">
 
-                  {% if t.concluido == 1 %}
+        <!-- TAREFAS -->
+        {% if tarefas %}
 
-                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-xl text-sm">
-                      ✓ Concluída
-                    </span>
+            <div class="divide-y divide-[#F1E8E3]">
 
-                  {% else %}
+                {% for t in tarefas %}
 
-                    <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-xl text-sm">
-                      Pendente
-                    </span>
+                    <div
+                        class="group
+                               p-5 md:px-7 md:py-5
+                               transition
 
-                  {% endif %}
-
-                </td>
-
-
-                <!-- AÇÕES -->
-                <td class="py-4">
-
-                  <div class="flex items-center gap-3">
-
-                    <!-- CONCLUIR / REABRIR -->
-                    <form
-                      action="{{ url_for('toggle_tarefa', id=t.id) }}"
-                      method="POST"
+                               {% if t.concluido == 1 %}
+                                   bg-[#FCFAF8]
+                               {% else %}
+                                   hover:bg-[#FFFCFA]
+                               {% endif %}"
                     >
-<input
-    type="hidden"
-    name="csrf_token"
-    value="{{ csrf_token() }}"
->
-                      <button
-                        type="submit"
-                        class="bg-rose-500 hover:bg-rose-600 text-white px-3 py-2 rounded-xl text-sm font-medium transition"
-                      >
 
-                        {% if t.concluido == 1 %}
-                          Reabrir
-                        {% else %}
-                          Concluir
-                        {% endif %}
-
-                      </button>
-
-                    </form>
+                        <div class="flex items-start gap-4">
 
 
-                    <!-- EXCLUIR -->
-                    <form
-                      action="{{ url_for('excluir_tarefa', id=t.id) }}"
-                      method="POST"
-                      onsubmit="return confirm('Deseja realmente excluir esta tarefa?');"
-                    >
-<input
-    type="hidden"
-    name="csrf_token"
-    value="{{ csrf_token() }}"
->
-                      <button
-                        type="submit"
-                        class="text-red-500 hover:text-red-700 text-sm font-medium"
-                      >
-                        Excluir
-                      </button>
+                            <!-- CONCLUIR / REABRIR -->
+                            <form
+                                action="{{ url_for('toggle_tarefa', id=t.id) }}"
+                                method="POST"
+                                class="shrink-0"
+                            >
 
-                    </form>
-
-                  </div>
-
-                </td>
-
-              </tr>
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                >
 
 
-            {% else %}
+                                <button
+                                    type="submit"
 
-              <tr>
+                                    title="{% if t.concluido == 1 %}Reabrir tarefa{% else %}Concluir tarefa{% endif %}"
 
-                <td
-                  colspan="4"
-                  class="py-10 text-center text-gray-400"
+                                    class="w-10 h-10
+                                           rounded-2xl
+                                           flex items-center justify-center
+                                           border
+                                           transition
+
+                                           {% if t.concluido == 1 %}
+                                               bg-[#EEF5F0]
+                                               border-[#DDE9E0]
+                                               text-[#52705B]
+                                               hover:bg-[#E5F0E8]
+                                           {% else %}
+                                               bg-white
+                                               border-[#EADDD5]
+                                               text-[#B9A79E]
+                                               hover:border-[#B96349]
+                                               hover:text-[#B96349]
+                                           {% endif %}"
+                                >
+
+                                    {% if t.concluido == 1 %}
+
+                                        <i
+                                            data-lucide="check"
+                                            class="w-5 h-5"
+                                        ></i>
+
+                                    {% else %}
+
+                                        <i
+                                            data-lucide="circle"
+                                            class="w-5 h-5"
+                                        ></i>
+
+                                    {% endif %}
+
+                                </button>
+
+                            </form>
+
+
+
+                            <!-- CONTEÚDO -->
+                            <div class="flex-1 min-w-0">
+
+                                <div
+                                    class="flex flex-col
+                                           sm:flex-row
+                                           sm:items-center
+                                           gap-2 sm:gap-3"
+                                >
+
+                                    <p
+                                        class="font-semibold
+                                               break-words
+
+                                               {% if t.concluido == 1 %}
+                                                   line-through
+                                                   text-[#A99A92]
+                                               {% else %}
+                                                   text-[#4A3027]
+                                               {% endif %}"
+                                    >
+                                        {{ t.titulo }}
+                                    </p>
+
+
+                                    {% if t.categoria %}
+
+                                        <span
+                                            class="self-start
+                                                   inline-flex
+                                                   bg-[#F8EDE8]
+                                                   text-[#B96349]
+                                                   rounded-full
+                                                   px-2.5 py-1
+                                                   text-[11px]
+                                                   font-semibold"
+                                        >
+                                            {{ t.categoria }}
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="flex items-center gap-2 mt-2">
+
+                                    {% if t.concluido == 1 %}
+
+                                        <span class="inline-flex items-center gap-1.5 text-xs text-[#66806D]">
+
+                                            <i
+                                                data-lucide="circle-check"
+                                                class="w-3.5 h-3.5"
+                                            ></i>
+
+                                            Concluída
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="inline-flex items-center gap-1.5 text-xs text-[#A28E84]">
+
+                                            <i
+                                                data-lucide="clock-3"
+                                                class="w-3.5 h-3.5"
+                                            ></i>
+
+                                            Pendente
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- AÇÕES -->
+                            <div class="shrink-0">
+
+                                <form
+                                    action="{{ url_for('excluir_tarefa', id=t.id) }}"
+                                    method="POST"
+                                    onsubmit="return confirm('Deseja realmente excluir esta tarefa?');"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="csrf_token"
+                                        value="{{ csrf_token() }}"
+                                    >
+
+
+                                    <button
+                                        type="submit"
+                                        title="Excluir tarefa"
+
+                                        class="w-9 h-9
+                                               rounded-xl
+                                               flex items-center justify-center
+                                               text-[#B9A79E]
+                                               hover:bg-red-50
+                                               hover:text-red-500
+                                               transition"
+                                    >
+
+                                        <i
+                                            data-lucide="trash-2"
+                                            class="w-4 h-4"
+                                        ></i>
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+            <!-- ESTADO VAZIO -->
+            <div class="px-6 py-14 text-center">
+
+                <div
+                    class="w-14 h-14
+                           mx-auto
+                           rounded-2xl
+                           bg-[#F8EDE8]
+                           text-[#B96349]
+                           flex items-center justify-center"
                 >
 
-                  <p class="text-lg mb-1">
-                    💍
-                  </p>
+                    <i
+                        data-lucide="list-checks"
+                        class="w-6 h-6"
+                    ></i>
 
-                  <p>
-                    Você ainda não adicionou nenhuma tarefa ao checklist.
-                  </p>
+                </div>
 
-                  <p class="text-sm mt-1">
-                    Comece adicionando sua primeira tarefa acima.
-                  </p>
 
-                </td>
+                <h3 class="font-bold text-[#4A3027] mt-4">
+                    Seu checklist está vazio
+                </h3>
 
-              </tr>
+                <p
+                    class="text-sm
+                           text-[#9A8378]
+                           mt-2
+                           max-w-sm
+                           mx-auto"
+                >
+                    Adicione sua primeira tarefa e comece a organizar
+                    cada detalhe do grande dia.
+                </p>
 
-            {% endfor %}
+            </div>
 
-          </tbody>
+        {% endif %}
 
-        </table>
+    </section>
 
-      </div>
 
-    </div>
 
-  </main>
+    <!-- RODAPÉ -->
+    <footer class="text-center pt-9 pb-3 text-xs text-[#B4A199]">
+        Uma tarefa de cada vez. 🤍
+    </footer>
 
-</body>
-</html>
+</div>
+
+{% endblock %}

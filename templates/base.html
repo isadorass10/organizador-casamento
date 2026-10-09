@@ -1,50 +1,219 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Casamento App</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-rose-50 text-slate-800">
-  <header class="border-b border-rose-100 bg-white/80 backdrop-blur sticky top-0 z-10">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-      <a href="{{ url_for('index') }}" class="text-2xl font-bold text-rose-500">Casamento App</a>
 
-      <nav class="flex items-center gap-3 text-sm">
-        <a href="{{ url_for('planos') }}" class="hover:text-rose-500">Planos</a>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+        content="Preparaí - organize checklist, convidados, fornecedores e financeiro do seu casamento em um só lugar.">
+
+  <title>
+    {% block titulo %}Preparaí | Planejamento de Casamento{% endblock %}
+  </title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonte -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    body {
+      font-family: "DM Sans", sans-serif;
+    }
+  </style>
+</head>
+
+
+<body class="bg-[#FFFCFA] text-[#4A3027]">
+
+  <!-- HEADER -->
+  <header
+    class="border-b border-[#EADDD5]
+           bg-[#FFFCFA]/90 backdrop-blur
+           sticky top-0 z-50">
+
+    <div
+      class="max-w-7xl mx-auto
+             px-5 md:px-8
+             h-20
+             flex items-center justify-between">
+
+<!-- LOGO -->
+<a href="{{ url_for('index') }}"
+   class="flex items-center">
+
+  <img
+    src="{{ url_for('static', filename='brand/logo-horizontal.png') }}"
+    alt="Preparaí"
+    class="h-10 md:h-12 w-auto"
+  >
+
+</a>
+
+
+      <!-- NAVEGAÇÃO -->
+      <nav class="flex items-center gap-3 md:gap-6 text-sm font-medium">
 
         {% if session.get('usuario_id') %}
-          <a href="{{ url_for('dashboard') }}" class="hover:text-rose-500">Dashboard</a>
-          <a href="{{ url_for('logout') }}" class="bg-rose-500 text-white px-4 py-2 rounded-xl hover:bg-rose-600">Sair</a>
+
+          <a
+            href="{{ url_for('dashboard') }}"
+            class="hidden sm:block
+                   text-[#6F5A50]
+                   hover:text-[#B96349]
+                   transition">
+
+            Meu planejamento
+
+          </a>
+
+          <a
+            href="{{ url_for('logout') }}"
+            class="bg-[#B96349]
+                   text-white
+                   px-4 md:px-5 py-2.5
+                   rounded-xl
+                   hover:bg-[#A6533C]
+                   transition">
+
+            Sair
+
+          </a>
+
         {% else %}
-          <a href="{{ url_for('login') }}" class="hover:text-rose-500">Login</a>
-          <a href="{{ url_for('cadastro') }}" class="bg-rose-500 text-white px-4 py-2 rounded-xl hover:bg-rose-600">Cadastrar</a>
+
+          <a
+            href="{{ url_for('login') }}"
+            class="text-[#6F5A50]
+                   hover:text-[#B96349]
+                   transition">
+
+            Entrar
+
+          </a>
+
+          <a
+            href="{{ url_for('cadastro') }}"
+            class="bg-[#B96349]
+                   text-white
+                   px-4 md:px-5 py-2.5
+                   rounded-xl
+                   hover:bg-[#A6533C]
+                   transition">
+
+            Começar
+
+          </a>
+
         {% endif %}
+
       </nav>
+
     </div>
+
   </header>
 
-  <main class="max-w-6xl mx-auto px-4 py-8">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="space-y-3 mb-6">
-          {% for categoria, mensagem in messages %}
-            <div class="rounded-2xl px-4 py-3 shadow-sm
-              {% if categoria == 'erro' %}
-                bg-red-50 text-red-700 border border-red-200
-              {% else %}
-                bg-emerald-50 text-emerald-700 border border-emerald-200
-              {% endif %}
-            ">
-              {{ mensagem }}
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
 
-    {% block conteudo %}{% endblock %}
+  <!-- MENSAGENS DO SISTEMA -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+      <div class="max-w-6xl mx-auto px-5 md:px-8 pt-5">
+
+        <div class="space-y-3">
+
+          {% for categoria, mensagem in messages %}
+
+            <div
+              class="rounded-2xl px-4 py-3 shadow-sm
+
+              {% if categoria == 'erro' %}
+
+                bg-red-50
+                text-red-700
+                border border-red-200
+
+              {% else %}
+
+                bg-emerald-50
+                text-emerald-700
+                border border-emerald-200
+
+              {% endif %}">
+
+              {{ mensagem }}
+
+            </div>
+
+          {% endfor %}
+
+        </div>
+
+      </div>
+
+    {% endif %}
+
+  {% endwith %}
+
+
+  <!-- CONTEÚDO -->
+  <main>
+
+    {% block conteudo %}
+    {% endblock %}
+
   </main>
+
+
+  <!-- RODAPÉ -->
+  <footer class="border-t border-[#EADDD5] mt-10">
+
+    <div
+      class="max-w-7xl mx-auto
+             px-5 md:px-8
+             py-8
+             flex flex-col md:flex-row
+             gap-4
+             items-center justify-between">
+
+      <div>
+
+        <p class="font-bold text-xl text-[#B96349]">
+          Preparaí<span class="text-[#4A3027]">.</span>
+        </p>
+
+        <p class="text-sm text-[#8A756B] mt-1">
+          Menos planilhas. Mais momentos.
+        </p>
+
+      </div>
+
+
+      <p class="text-sm text-[#9A8378] text-center md:text-right">
+
+        © 2026 Preparaí.
+        Feito para quem tem um grande dia para preparar. 💍
+
+      </p>
+
+    </div>
+
+  </footer>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+  lucide.createIcons();
+</script>
 </body>
+
 </html>

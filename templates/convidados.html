@@ -1,531 +1,587 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends "base_app.html" %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Convidados | Planner de Casamento</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
+{% block titulo %}
+Convidados | Preparaí
+{% endblock %}
 
 
-<body class="bg-gradient-to-br from-rose-50 via-white to-pink-50 min-h-screen">
+{% block conteudo %}
 
-  <!-- HEADER -->
-  <header class="bg-white shadow-sm border-b border-rose-100">
+<div class="max-w-7xl mx-auto px-5 md:px-8 xl:px-10 py-7 lg:py-10">
 
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
-      <div>
+    <!-- CABEÇALHO -->
+    <section class="mb-8 pr-0 lg:pr-28">
 
-        <h1 class="text-2xl font-bold text-gray-800">
-          👥 Lista de Convidados
-        </h1>
-
-        <p class="text-sm text-gray-500">
-          Organize quem estará com vocês no grande dia 💍
+        <p class="text-sm font-semibold text-[#B96349]">
+            Planejamento
         </p>
 
-      </div>
+        <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-[#4A3027] mt-1">
+            Convidados
+        </h1>
 
+        <p class="text-sm md:text-base text-[#8A756B] mt-2">
+            Organize quem estará com vocês no grande dia.
+        </p>
 
-      <div class="flex items-center gap-3">
+    </section>
 
-        <a
-          href="{{ url_for('dashboard') }}"
-          class="bg-rose-100 hover:bg-rose-200 text-rose-600 px-4 py-2 rounded-xl text-sm font-medium transition"
-        >
-          Voltar ao dashboard
-        </a>
-
-
-        <a
-          href="{{ url_for('logout') }}"
-          class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl text-sm transition"
-        >
-          Sair
-        </a>
-
-      </div>
-
-    </div>
-
-  </header>
-
-
-  <!-- CONTEÚDO -->
-  <main class="max-w-7xl mx-auto px-6 py-8">
-
-
-    <!-- MENSAGENS -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-
-      {% if messages %}
-
-        {% for categoria, mensagem in messages %}
-
-          <div
-            class="mb-6 rounded-2xl px-4 py-3 text-sm
-              {% if categoria == 'erro' %}
-                bg-red-100 text-red-700 border border-red-200
-              {% else %}
-                bg-green-100 text-green-700 border border-green-200
-              {% endif %}
-            "
-          >
-
-            {{ mensagem }}
-
-          </div>
-
-        {% endfor %}
-
-      {% endif %}
-
-    {% endwith %}
 
 
     <!-- RESUMO -->
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+    <section class="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-7">
 
 
-      <!-- CADASTROS -->
-      <div class="bg-white rounded-3xl shadow p-6">
+        <!-- CADASTROS -->
+        <div class="bg-white border border-[#EFE4DE] rounded-3xl p-5">
 
-        <h3 class="text-gray-500 text-sm">
-          Cadastros
-        </h3>
+            <div class="flex items-start justify-between gap-3">
 
-        <p class="text-2xl font-bold text-gray-800 mt-1">
-          {{ convidados|length }}
-        </p>
+                <div>
+                    <p class="text-xs md:text-sm text-[#8A756B]">
+                        Cadastros
+                    </p>
 
-      </div>
+                    <p class="text-2xl font-bold text-[#4A3027] mt-2">
+                        {{ convidados|length }}
+                    </p>
+                </div>
 
+                <div class="hidden sm:flex w-9 h-9 rounded-xl bg-[#F8F1ED] text-[#B96349] items-center justify-center">
+                    <i data-lucide="contact" class="w-4 h-4"></i>
+                </div>
 
-      <!-- TOTAL PESSOAS -->
-      <div class="bg-white rounded-3xl shadow p-6">
+            </div>
 
-        <h3 class="text-gray-500 text-sm">
-          Total de Pessoas
-        </h3>
-
-        <p class="text-2xl font-bold text-rose-500 mt-1">
-          {{ total_pessoas }}
-        </p>
-
-      </div>
+        </div>
 
 
-      <!-- CONFIRMADOS -->
-      <div class="bg-white rounded-3xl shadow p-6">
+        <!-- TOTAL -->
+        <div class="bg-white border border-[#EFE4DE] rounded-3xl p-5">
 
-        <h3 class="text-gray-500 text-sm">
-          Confirmados
-        </h3>
+            <div class="flex items-start justify-between gap-3">
 
-        <p class="text-2xl font-bold text-green-600 mt-1">
-          {{ confirmados }}
-        </p>
+                <div>
+                    <p class="text-xs md:text-sm text-[#8A756B]">
+                        Pessoas
+                    </p>
 
-      </div>
+                    <p class="text-2xl font-bold text-[#4A3027] mt-2">
+                        {{ total_pessoas }}
+                    </p>
+                </div>
 
+                <div class="hidden sm:flex w-9 h-9 rounded-xl bg-[#F8F1ED] text-[#B96349] items-center justify-center">
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                </div>
 
-      <!-- PENDENTES -->
-      <div class="bg-white rounded-3xl shadow p-6">
+            </div>
 
-        <h3 class="text-gray-500 text-sm">
-          Pendentes
-        </h3>
-
-        <p class="text-2xl font-bold text-yellow-600 mt-1">
-          {{ pendentes }}
-        </p>
-
-      </div>
+        </div>
 
 
-      <!-- NÃO IRÃO -->
-      <div class="bg-white rounded-3xl shadow p-6">
+        <!-- CONFIRMADOS -->
+        <div class="bg-white border border-[#DDE9E0] rounded-3xl p-5">
 
-        <h3 class="text-gray-500 text-sm">
-          Não irão
-        </h3>
+            <div class="flex items-start justify-between gap-3">
 
-        <p class="text-2xl font-bold text-red-500 mt-1">
-          {{ nao_irao }}
-        </p>
+                <div>
+                    <p class="text-xs md:text-sm text-[#8A756B]">
+                        Confirmados
+                    </p>
 
-      </div>
+                    <p class="text-2xl font-bold text-[#52705B] mt-2">
+                        {{ confirmados }}
+                    </p>
+                </div>
 
-    </div>
+                <div class="hidden sm:flex w-9 h-9 rounded-xl bg-[#EEF5F0] text-[#52705B] items-center justify-center">
+                    <i data-lucide="circle-check" class="w-4 h-4"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PENDENTES -->
+        <div class="bg-white border border-[#F0E6D5] rounded-3xl p-5">
+
+            <div class="flex items-start justify-between gap-3">
+
+                <div>
+                    <p class="text-xs md:text-sm text-[#8A756B]">
+                        Pendentes
+                    </p>
+
+                    <p class="text-2xl font-bold text-[#A47B43] mt-2">
+                        {{ pendentes }}
+                    </p>
+                </div>
+
+                <div class="hidden sm:flex w-9 h-9 rounded-xl bg-[#F8F3E9] text-[#A47B43] items-center justify-center">
+                    <i data-lucide="clock-3" class="w-4 h-4"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- NÃO IRÃO -->
+        <div class="col-span-2 md:col-span-1 bg-white border border-red-100 rounded-3xl p-5">
+
+            <div class="flex items-start justify-between gap-3">
+
+                <div>
+                    <p class="text-xs md:text-sm text-[#8A756B]">
+                        Não irão
+                    </p>
+
+                    <p class="text-2xl font-bold text-[#B96B62] mt-2">
+                        {{ nao_irao }}
+                    </p>
+                </div>
+
+                <div class="hidden sm:flex w-9 h-9 rounded-xl bg-red-50 text-[#B96B62] items-center justify-center">
+                    <i data-lucide="user-round-x" class="w-4 h-4"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
 
 
     <!-- ADICIONAR CONVIDADO -->
-    <div class="bg-white rounded-3xl shadow p-6 mb-8">
+    <section class="bg-white border border-[#EFE4DE] rounded-3xl p-6 md:p-7 mb-7">
 
-      <h2 class="text-xl font-bold text-gray-800 mb-4">
-        Adicionar Convidado
-      </h2>
+        <div class="flex items-start gap-4 mb-6">
+
+            <div class="w-11 h-11 shrink-0 rounded-2xl bg-[#F8EDE8] text-[#B96349] flex items-center justify-center">
+                <i data-lucide="user-round-plus" class="w-5 h-5"></i>
+            </div>
+
+            <div>
+                <h2 class="text-lg font-bold text-[#4A3027]">
+                    Adicionar convidado
+                </h2>
+
+                <p class="text-sm text-[#9A8378] mt-1">
+                    Cadastre uma pessoa ou um convite com acompanhantes.
+                </p>
+            </div>
+
+        </div>
 
 
-      <form
-        action="{{ url_for('add_convidado') }}"
-        method="POST"
-        class="grid md:grid-cols-5 gap-4"
-        
-      >
-<input
-    type="hidden"
-    name="csrf_token"
-    value="{{ csrf_token() }}"
->
-        <!-- NOME -->
-        <input
-          type="text"
-          name="nome"
-          placeholder="Nome do convidado"
-          class="border border-gray-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
-          required
+        <form
+            action="{{ url_for('add_convidado') }}"
+            method="POST"
+            class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-3"
         >
 
-
-        <!-- TELEFONE -->
-        <input
-          type="text"
-          name="telefone"
-          placeholder="Telefone"
-          class="border border-gray-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
-        >
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
 
 
-        <!-- ACOMPANHANTES -->
-        <input
-          type="number"
-          name="acompanhantes"
-          min="0"
-          value="0"
-          placeholder="Acompanhantes"
-          class="border border-gray-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
-        >
+            <!-- NOME -->
+            <div class="xl:col-span-3">
+
+                <label class="block text-xs font-semibold text-[#6F5A50] mb-2">
+                    NOME
+                </label>
+
+                <input
+                    type="text"
+                    name="nome"
+                    placeholder="Nome do convidado"
+                    required
+                    class="w-full bg-white border border-[#EADDD5] rounded-2xl px-4 py-3.5 text-sm text-[#4A3027] placeholder:text-[#C1B1A9] outline-none focus:border-[#B96349] focus:ring-4 focus:ring-[#B96349]/10 transition"
+                >
+
+            </div>
 
 
-        <!-- STATUS -->
-        <select
-          name="status_confirmacao"
-          class="border border-gray-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
-        >
+            <!-- TELEFONE -->
+            <div class="xl:col-span-2">
 
-          <option value="Pendente">
-            Pendente
-          </option>
+                <label class="block text-xs font-semibold text-[#6F5A50] mb-2">
+                    TELEFONE
+                </label>
 
-          <option value="Confirmado">
-            Confirmado
-          </option>
+                <input
+                    type="text"
+                    name="telefone"
+                    placeholder="(31) 99999-9999"
+                    class="w-full bg-white border border-[#EADDD5] rounded-2xl px-4 py-3.5 text-sm text-[#4A3027] placeholder:text-[#C1B1A9] outline-none focus:border-[#B96349] focus:ring-4 focus:ring-[#B96349]/10 transition"
+                >
 
-          <option value="Não irá">
-            Não irá
-          </option>
-
-        </select>
+            </div>
 
 
-        <!-- OBSERVAÇÃO -->
-        <input
-          type="text"
-          name="observacao"
-          placeholder="Observação"
-          class="border border-gray-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
-        >
+            <!-- ACOMPANHANTES -->
+            <div class="xl:col-span-2">
+
+                <label class="block text-xs font-semibold text-[#6F5A50] mb-2">
+                    ACOMPANHANTES
+                </label>
+
+                <input
+                    type="number"
+                    name="acompanhantes"
+                    min="0"
+                    value="0"
+                    class="w-full bg-white border border-[#EADDD5] rounded-2xl px-4 py-3.5 text-sm text-[#4A3027] outline-none focus:border-[#B96349] focus:ring-4 focus:ring-[#B96349]/10 transition"
+                >
+
+            </div>
 
 
-        <!-- BOTÃO -->
-        <button
-          type="submit"
-          class="md:col-span-5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl p-3 font-semibold shadow-md transition"
-        >
-          + Adicionar convidado
-        </button>
+            <!-- STATUS -->
+            <div class="xl:col-span-2">
 
-      </form>
+                <label class="block text-xs font-semibold text-[#6F5A50] mb-2">
+                    STATUS
+                </label>
 
-    </div>
+                <select
+                    name="status_confirmacao"
+                    class="w-full bg-white border border-[#EADDD5] rounded-2xl px-4 py-3.5 text-sm text-[#6F5A50] outline-none focus:border-[#B96349] focus:ring-4 focus:ring-[#B96349]/10 transition"
+                >
+                    <option value="Pendente">Pendente</option>
+                    <option value="Confirmado">Confirmado</option>
+                    <option value="Não irá">Não irá</option>
+                </select>
+
+            </div>
+
+
+            <!-- OBSERVAÇÃO -->
+            <div class="md:col-span-2 xl:col-span-3">
+
+                <label class="block text-xs font-semibold text-[#6F5A50] mb-2">
+                    OBSERVAÇÃO
+                </label>
+
+                <input
+                    type="text"
+                    name="observacao"
+                    placeholder="Ex.: Vegetariano"
+                    class="w-full bg-white border border-[#EADDD5] rounded-2xl px-4 py-3.5 text-sm text-[#4A3027] placeholder:text-[#C1B1A9] outline-none focus:border-[#B96349] focus:ring-4 focus:ring-[#B96349]/10 transition"
+                >
+
+            </div>
+
+
+            <!-- BOTÃO -->
+            <div class="md:col-span-2 xl:col-span-12 flex justify-end pt-1">
+
+                <button
+                    type="submit"
+                    class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-[#B96349] hover:bg-[#A6533C] text-white rounded-2xl px-6 py-3.5 text-sm font-semibold transition"
+                >
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    Adicionar convidado
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
 
 
     <!-- LISTA -->
-    <div class="bg-white rounded-3xl shadow p-6">
+    <section class="bg-white border border-[#EFE4DE] rounded-3xl overflow-hidden">
 
-      <div class="flex items-center justify-between mb-4">
+        <div class="px-6 md:px-7 py-5 border-b border-[#F1E8E3]">
 
-        <h2 class="text-xl font-bold text-gray-800">
-          Minha Lista
-        </h2>
+            <div class="flex items-center justify-between gap-4">
 
-        <span class="text-sm text-gray-500">
-          {{ convidados|length }} cadastros
-        </span>
+                <div>
+                    <h2 class="text-lg font-bold text-[#4A3027]">
+                        Minha lista
+                    </h2>
 
-      </div>
+                    <p class="text-sm text-[#9A8378] mt-1">
+                        Edite os dados e acompanhe as confirmações.
+                    </p>
+                </div>
 
+                {% if convidados %}
+                    <span class="hidden sm:inline-flex bg-[#F8F1ED] text-[#8A756B] rounded-full px-3 py-1.5 text-xs font-semibold">
+                        {{ convidados|length }} cadastros
+                    </span>
+                {% endif %}
 
-      <div class="overflow-x-auto">
+            </div>
 
-        <table class="w-full text-left">
+        </div>
 
-          <thead class="text-gray-500 border-b">
 
-            <tr>
+        {% if convidados %}
 
-              <th class="py-3">
-                Nome
-              </th>
+            <div class="divide-y divide-[#F1E8E3]">
 
-              <th>
-                Telefone
-              </th>
+                {% for c in convidados %}
 
-              <th>
-                Acompanhantes
-              </th>
+                    <div class="p-5 md:px-7 md:py-6 hover:bg-[#FFFCFA] transition">
 
-              <th>
-                Status
-              </th>
+                        <!--
+                            Mantemos o mesmo comportamento do template anterior:
+                            os campos usam o atributo form para pertencer ao
+                            formulário de edição deste convidado.
+                        -->
 
-              <th>
-                Observação
-              </th>
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
 
-              <th>
-                Ações
-              </th>
 
-            </tr>
+                            <!-- NOME -->
+                            <div class="lg:col-span-3">
 
-          </thead>
+                                <label class="block text-[10px] uppercase tracking-wider font-bold text-[#A28E84] mb-1.5">
+                                    Nome
+                                </label>
 
+                                <input
+                                    type="text"
+                                    name="nome"
+                                    value="{{ c.nome }}"
+                                    form="editar-{{ c.id }}"
+                                    required
+                                    class="w-full bg-white border border-[#EADDD5] rounded-xl px-3 py-2.5 text-sm font-medium text-[#4A3027] outline-none focus:border-[#B96349] focus:ring-2 focus:ring-[#B96349]/10 transition"
+                                >
 
-          <tbody>
+                            </div>
 
-            {% for c in convidados %}
 
-              <tr class="border-b hover:bg-gray-50 align-top">
+                            <!-- TELEFONE -->
+                            <div class="lg:col-span-2">
 
-                <!--
-                  Cada linha possui seu próprio formulário de edição.
-                  O atributo form nos campos associa cada input
-                  ao formulário correspondente.
-                -->
+                                <label class="block text-[10px] uppercase tracking-wider font-bold text-[#A28E84] mb-1.5">
+                                    Telefone
+                                </label>
 
-                <td class="py-3 pr-3">
+                                <input
+                                    type="text"
+                                    name="telefone"
+                                    value="{{ c.telefone or '' }}"
+                                    form="editar-{{ c.id }}"
+                                    placeholder="Telefone"
+                                    class="w-full bg-white border border-[#EADDD5] rounded-xl px-3 py-2.5 text-sm text-[#4A3027] outline-none focus:border-[#B96349] focus:ring-2 focus:ring-[#B96349]/10 transition"
+                                >
 
-                  <input
-                    type="text"
-                    name="nome"
-                    value="{{ c.nome }}"
-                    form="editar-{{ c.id }}"
-                    class="border border-gray-200 rounded-xl p-2 w-48 text-sm"
-                    required
-                  >
+                            </div>
 
-                </td>
 
+                            <!-- ACOMPANHANTES -->
+                            <div class="lg:col-span-1">
 
-                <!-- TELEFONE -->
-                <td class="py-3 pr-3">
+                                <label class="block text-[10px] uppercase tracking-wider font-bold text-[#A28E84] mb-1.5">
+                                    Acomp.
+                                </label>
 
-                  <input
-                    type="text"
-                    name="telefone"
-                    value="{{ c.telefone or '' }}"
-                    form="editar-{{ c.id }}"
-                    placeholder="Telefone"
-                    class="border border-gray-200 rounded-xl p-2 w-36 text-sm"
-                  >
+                                <input
+                                    type="number"
+                                    name="acompanhantes"
+                                    value="{{ c.acompanhantes or 0 }}"
+                                    min="0"
+                                    form="editar-{{ c.id }}"
+                                    class="w-full bg-white border border-[#EADDD5] rounded-xl px-3 py-2.5 text-sm text-[#4A3027] outline-none focus:border-[#B96349] focus:ring-2 focus:ring-[#B96349]/10 transition"
+                                >
 
-                  {% if c.telefone %}
+                            </div>
 
-                    <a
-                      href="https://wa.me/55{{ c.telefone }}"
-                      target="_blank"
-                      class="block text-green-600 hover:text-green-700 text-xs mt-1"
-                    >
-                      Abrir WhatsApp
-                    </a>
 
-                  {% endif %}
-
-                </td>
-
+                            <!-- STATUS -->
+                            <div class="lg:col-span-2">
+
+                                <label class="block text-[10px] uppercase tracking-wider font-bold text-[#A28E84] mb-1.5">
+                                    Status
+                                </label>
+
+                                <select
+                                    name="status_confirmacao"
+                                    form="editar-{{ c.id }}"
+                                    class="w-full border rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#B96349]/10 transition
+
+                                    {% if c.status_confirmacao == 'Confirmado' %}
+                                        bg-[#EEF5F0] border-[#DDE9E0] text-[#52705B]
+                                    {% elif c.status_confirmacao == 'Não irá' %}
+                                        bg-red-50 border-red-100 text-[#B96B62]
+                                    {% else %}
+                                        bg-[#F8F3E9] border-[#EFE3CD] text-[#94703E]
+                                    {% endif %}"
+                                >
+
+                                    <option
+                                        value="Pendente"
+                                        {% if c.status_confirmacao == 'Pendente' %}selected{% endif %}
+                                    >
+                                        Pendente
+                                    </option>
+
+                                    <option
+                                        value="Confirmado"
+                                        {% if c.status_confirmacao == 'Confirmado' %}selected{% endif %}
+                                    >
+                                        Confirmado
+                                    </option>
+
+                                    <option
+                                        value="Não irá"
+                                        {% if c.status_confirmacao == 'Não irá' %}selected{% endif %}
+                                    >
+                                        Não irá
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- OBSERVAÇÃO -->
+                            <div class="lg:col-span-2">
+
+                                <label class="block text-[10px] uppercase tracking-wider font-bold text-[#A28E84] mb-1.5">
+                                    Observação
+                                </label>
 
-                <!-- ACOMPANHANTES -->
-                <td class="py-3 pr-3">
+                                <input
+                                    type="text"
+                                    name="observacao"
+                                    value="{{ c.observacao or '' }}"
+                                    form="editar-{{ c.id }}"
+                                    placeholder="Observação"
+                                    class="w-full bg-white border border-[#EADDD5] rounded-xl px-3 py-2.5 text-sm text-[#4A3027] outline-none focus:border-[#B96349] focus:ring-2 focus:ring-[#B96349]/10 transition"
+                                >
 
-                  <input
-                    type="number"
-                    name="acompanhantes"
-                    value="{{ c.acompanhantes or 0 }}"
-                    min="0"
-                    form="editar-{{ c.id }}"
-                    class="border border-gray-200 rounded-xl p-2 w-24 text-sm"
-                  >
-
-                </td>
-
-
-                <!-- STATUS -->
-                <td class="py-3 pr-3">
-
-                  <select
-                    name="status_confirmacao"
-                    form="editar-{{ c.id }}"
-                    class="border border-gray-200 rounded-xl p-2 text-sm"
-                  >
-
-                    <option
-                      value="Pendente"
-                      {% if c.status_confirmacao == 'Pendente' %}
-                        selected
-                      {% endif %}
-                    >
-                      Pendente
-                    </option>
+                            </div>
 
 
-                    <option
-                      value="Confirmado"
-                      {% if c.status_confirmacao == 'Confirmado' %}
-                        selected
-                      {% endif %}
-                    >
-                      Confirmado
-                    </option>
+                            <!-- AÇÕES -->
+                            <div class="lg:col-span-2">
+
+                                <label class="hidden lg:block text-[10px] uppercase tracking-wider font-bold text-[#A28E84] mb-1.5">
+                                    Ações
+                                </label>
 
 
-                    <option
-                      value="Não irá"
-                      {% if c.status_confirmacao == 'Não irá' %}
-                        selected
-                      {% endif %}
-                    >
-                      Não irá
-                    </option>
+                                <div class="flex items-center gap-2">
 
-                  </select>
+                                    <!-- SALVAR -->
+                                    <form
+                                        id="editar-{{ c.id }}"
+                                        action="{{ url_for('update_convidado', id=c.id) }}"
+                                        method="POST"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="csrf_token"
+                                            value="{{ csrf_token() }}"
+                                        >
 
-                </td>
+                                        <button
+                                            type="submit"
+                                            title="Salvar alterações"
+                                            class="inline-flex items-center justify-center gap-1.5 bg-[#B96349] hover:bg-[#A6533C] text-white rounded-xl px-3.5 py-2.5 text-xs font-semibold transition"
+                                        >
+                                            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                                            Salvar
+                                        </button>
+                                    </form>
 
 
-                <!-- OBSERVAÇÃO -->
-                <td class="py-3 pr-3">
+                                    <!-- WHATSAPP -->
+                                    {% if c.telefone %}
 
-                  <input
-                    type="text"
-                    name="observacao"
-                    value="{{ c.observacao or '' }}"
-                    form="editar-{{ c.id }}"
-                    placeholder="Observação"
-                    class="border border-gray-200 rounded-xl p-2 w-44 text-sm"
-                  >
+                                        <a
+                                            href="https://wa.me/55{{ c.telefone }}"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            title="Abrir WhatsApp"
+                                            class="w-9 h-9 shrink-0 rounded-xl border border-[#DDE9E0] bg-[#EEF5F0] text-[#52705B] hover:bg-[#E5F0E8] flex items-center justify-center transition"
+                                        >
+                                            <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                        </a>
 
-                </td>
+                                    {% endif %}
 
 
-                <!-- AÇÕES -->
-                <td class="py-3">
+                                    <!-- EXCLUIR -->
+                                    <form
+                                        action="{{ url_for('delete_convidado', id=c.id) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Deseja realmente excluir este convidado?');"
+                                    >
 
-                  <div class="flex items-center gap-3">
+                                        <input
+                                            type="hidden"
+                                            name="csrf_token"
+                                            value="{{ csrf_token() }}"
+                                        >
 
+                                        <button
+                                            type="submit"
+                                            title="Excluir convidado"
+                                            class="w-9 h-9 shrink-0 rounded-xl text-[#B9A79E] hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition"
+                                        >
+                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                        </button>
 
-                    <!-- EDITAR -->
-                    <form
-                      id="editar-{{ c.id }}"
-                      action="{{ url_for('update_convidado', id=c.id) }}"
-                      method="POST"
-                    >
-<input
-    type="hidden"
-    name="csrf_token"
-    value="{{ csrf_token() }}"
->
-                      <button
-                        type="submit"
-                        class="bg-rose-500 hover:bg-rose-600 text-white px-3 py-2 rounded-xl text-sm font-medium transition"
-                      >
-                        Salvar
-                      </button>
+                                    </form>
 
-                    </form>
+                                </div>
 
+                            </div>
 
-                    <!-- EXCLUIR -->
-                    <form
-                      action="{{ url_for('delete_convidado', id=c.id) }}"
-                      method="POST"
-                      onsubmit="return confirm('Deseja realmente excluir este convidado?');"
-                    >
-<input
-        type="hidden"
-        name="csrf_token"
-        value="{{ csrf_token() }}"
-    >
+                        </div>
 
-                      <button
-                        type="submit"
-                        class="text-red-500 hover:text-red-700 text-sm font-medium"
-                      >
-                        Excluir
-                      </button>
+                    </div>
 
-                    </form>
+                {% endfor %}
 
-                  </div>
+            </div>
 
-                </td>
 
-              </tr>
+        {% else %}
 
+            <!-- ESTADO VAZIO -->
+            <div class="px-6 py-14 text-center">
 
-            {% else %}
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-[#F8EDE8] text-[#B96349] flex items-center justify-center">
+                    <i data-lucide="users-round" class="w-6 h-6"></i>
+                </div>
 
-              <tr>
+                <h3 class="font-bold text-[#4A3027] mt-4">
+                    Sua lista está vazia
+                </h3>
 
-                <td
-                  colspan="6"
-                  class="py-10 text-center text-gray-400"
-                >
+                <p class="text-sm text-[#9A8378] mt-2 max-w-sm mx-auto">
+                    Adicione seu primeiro convidado e comece a organizar
+                    quem estará com vocês no grande dia.
+                </p>
 
-                  <p class="text-lg">
-                    💌
-                  </p>
+            </div>
 
-                  <p class="mt-1">
-                    Você ainda não adicionou nenhum convidado.
-                  </p>
+        {% endif %}
 
-                  <p class="text-sm mt-1">
-                    Comece cadastrando alguém acima.
-                  </p>
+    </section>
 
-                </td>
 
-              </tr>
+    <!-- RODAPÉ -->
+    <footer class="text-center pt-9 pb-3 text-xs text-[#B4A199]">
+        As melhores histórias são feitas de gente. 🤍
+    </footer>
 
-            {% endfor %}
+</div>
 
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-  </main>
-
-</body>
-
-</html>
+{% endblock %}

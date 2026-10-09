@@ -10,7 +10,8 @@ Fluxo: cadastro -> sessão autenticada -> onboarding -> dashboard.
 import os
 import math
 import resend
-from datetime import datetime, date
+import logging
+from datetime import datetime, date, timedelta
 from pathlib import Path
 from uuid import uuid4
 from flask_limiter import Limiter
@@ -46,6 +47,12 @@ BASE_DIR = Path(__file__).resolve().parent
 # Carrega as variáveis do arquivo .env
 load_dotenv(BASE_DIR / ".env")
 
+AMBIENTE = os.getenv(
+    "FLASK_ENV",
+    "development"
+).lower()
+
+EM_PRODUCAO = AMBIENTE == "production"
 
 # ==========================================================
 # FLASK
@@ -53,10 +60,24 @@ load_dotenv(BASE_DIR / ".env")
 
 app = Flask(__name__)
 
+# =========================================================
+# LOGS
+# =========================================================
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s"
+)
+
+logger = logging.getLogger(__name__)
+
+redis_url = os.getenv("REDIS_URL")
+
 limiter = Limiter(
     key_func=get_remote_address,
     app=app,
-    default_limits=[]
+    default_limits=[],
+    storage_uri=redis_url if redis_url else "memory://"
 )
 app.secret_key = os.getenv("SECRET_KEY")
 
@@ -69,10 +90,21 @@ csrf = CSRFProtect(app)
 # SEGURANÇA DA SESSÃO
 # =========================================================
 
+# =========================================================
+# SEGURANÇA DA SESSÃO
+# =========================================================
+
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
-    SESSION_COOKIE_SECURE=False,
+
+    # Enquanto estivermos rodando localmente em HTTP,
+    # precisa permanecer False.
+    # Em produção com HTTPS será alterado para True.
+    SESSION_COOKIE_SECURE=EM_PRODUCAO,
+
+    # Tempo máximo da sessão autenticada.
+    PERMANENT_SESSION_LIFETIME=timedelta(hours=8),
 )
 # ==========================================================
 # RESEND
@@ -224,15 +256,7 @@ def usuario_logado():
 
 @app.route("/")
 def index():
-
-    if usuario_logado():
-        return redirect(
-            url_for("dashboard")
-        )
-
-    return redirect(
-        url_for("login")
-    )
+    return render_template("index.html")
 @app.route(
     "/redefinir-senha/<token>",
     methods=["GET", "POST"]
@@ -393,10 +417,26 @@ def redefinir_senha(token):
         )
 
 
-    if len(nova_senha) < 6:
+    senha_valida, erro_senha = validar_senha(nova_senha)
+
+    if not senha_valida:
 
         flash(
-            "A nova senha precisa ter pelo menos 6 caracteres.",
+            erro_senha,
+            "erro"
+        )
+
+        return redirect(
+            url_for(
+                "redefinir_senha",
+                token=token
+            )
+        )
+
+    if nova_senha != confirmar_senha:
+
+        flash(
+            "As senhas informadas não conferem.",
             "erro"
         )
 
@@ -457,9 +497,8 @@ def redefinir_senha(token):
 
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO AO REDEFINIR SENHA:",
-            erro
         )
 
         flash(
@@ -484,7 +523,7 @@ def redefinir_senha(token):
     # =========================================================
 
     session.clear()
-
+    session.permanent = True
 
     # =========================================================
     # 11. REDIRECIONAR PARA LOGIN
@@ -498,6 +537,18 @@ def redefinir_senha(token):
     return redirect(
         url_for("login")
     )
+# =========================================================
+# VALIDAÇÃO DE SENHA
+# =========================================================
+
+def validar_senha(senha):
+    if not senha:
+        return False, "Informe uma senha."
+
+    if len(senha) < 8:
+        return False, "A senha precisa ter pelo menos 8 caracteres."
+
+    return True, None
 
 @app.route("/esqueci-senha", methods=["GET", "POST"])
 @limiter.limit("3 per 10 minutes", methods=["POST"])
@@ -659,9 +710,8 @@ def esqueci_senha():
             # Não vamos mostrar detalhes técnicos
             # para o usuário.
 
-            print(
+            logger.exception(
                 "ERRO AO ENVIAR RECUPERAÇÃO:",
-                erro
             )
 
 
@@ -681,6 +731,10 @@ def esqueci_senha():
 @app.route(
     "/cadastro",
     methods=["GET", "POST"]
+)
+@limiter.limit(
+    "3 per minute",
+    methods=["POST"]
 )
 def cadastro():
     if request.method == "GET":
@@ -722,9 +776,11 @@ def cadastro():
             url_for("cadastro")
         )
 
-    if len(senha) < 6:
+    senha_valida, erro_senha = validar_senha(senha)
+
+    if not senha_valida:
         flash(
-            "A senha precisa ter pelo menos 6 caracteres.",
+            erro_senha,
             "erro"
         )
 
@@ -821,9 +877,8 @@ def cadastro():
     except Exception as erro:
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO NO CADASTRO:",
-            erro
         )
 
         flash(
@@ -843,6 +898,7 @@ def cadastro():
     # ==================================================
 
     session.clear()
+    session.permanent = True
     session["usuario_id"] = usuario_id
     session["usuario_nome"] = nome
 
@@ -958,14 +1014,11 @@ def login():
 # LOGOUT
 # ==========================================================
 
-@app.route("/logout")
+@app.route("/logout", methods=["POST"])
 def logout():
-
     session.clear()
-
-    return redirect(
-        url_for("login")
-    )
+    flash("Você saiu da sua conta com segurança.", "sucesso")
+    return redirect(url_for("login"))
 
 # ==========================================================
 # DASHBOARD
@@ -1804,9 +1857,8 @@ def add_tarefa():
 
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO AO ADICIONAR TAREFA:",
-            erro
         )
 
         flash(
@@ -2143,19 +2195,6 @@ def fornecedores():
     """, (
         usuario_id,
     )).fetchall()
-    
-    print("=== FORNECEDORES RECEBIDOS PELA ROTA ===")
-    print("USUARIO_ID:", usuario_id)
-
-    for fornecedor in lista_fornecedores:
-        print(
-        fornecedor["id"],
-        fornecedor["nome"],
-        fornecedor["valor"],
-        fornecedor["valor_pago"]
-    )
-    print("FORNECEDORES DA ROTA:", lista_fornecedores)
-    print("========================================")
 
     total_contratado = sum(
         float(f["valor"] or 0)
@@ -2645,9 +2684,8 @@ def editar_fornecedor(id):
     except Exception as erro:
         conn.rollback()
 
-        print(
-            "ERRO AO EDITAR FORNECEDOR:",
-            erro
+        logger.exception(
+            "Erro ao editar fornecedor:",
         )
 
         flash(
@@ -2759,9 +2797,8 @@ def delete_fornecedor(id):
     except Exception as erro:
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO AO EXCLUIR FORNECEDOR:",
-            erro
         )
 
         flash(
@@ -2948,9 +2985,8 @@ def acrescentar_pagamento(id):
     except Exception as erro:
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO AO REGISTRAR PAGAMENTO:",
-            erro
         )
 
         flash(
@@ -3236,9 +3272,8 @@ def adicionar_pagamento_planejado(id):
 
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO AO CRIAR PAGAMENTO PLANEJADO:",
-            erro
         )
 
         flash(
@@ -3435,9 +3470,8 @@ def editar_pagamento_planejado(id):
     except Exception as erro:
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO AO EDITAR PAGAMENTO PLANEJADO:",
-            erro
         )
 
         flash(
@@ -3555,9 +3589,8 @@ def excluir_pagamento_planejado(id):
     except Exception as erro:
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO AO EXCLUIR PAGAMENTO PLANEJADO:",
-            erro
         )
 
         flash(
@@ -3784,9 +3817,8 @@ def registrar_planejado_como_pago(id):
     except Exception as erro:
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO AO REGISTRAR PLANEJADO COMO PAGO:",
-            erro
         )
 
         flash(
@@ -3899,9 +3931,8 @@ def adicionar_categoria_fornecedor():
 
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO AO CRIAR CATEGORIA:",
-            erro
         )
 
         flash(
@@ -4038,9 +4069,8 @@ def editar_categoria_fornecedor(id):
 
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO AO EDITAR CATEGORIA:",
-            erro
         )
 
         flash(
@@ -4158,9 +4188,8 @@ def excluir_categoria_fornecedor(id):
     except Exception as erro:
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO AO EXCLUIR CATEGORIA:",
-            erro
         )
 
         flash(
@@ -4642,9 +4671,8 @@ def salvar_onboarding():
 
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO AO SALVAR ONBOARDING:",
-            erro
         )
 
         flash(
@@ -4806,9 +4834,8 @@ def atualizar_conta():
 
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO AO ATUALIZAR CONTA:",
-            erro
         )
 
         flash(
@@ -4880,16 +4907,17 @@ def alterar_senha():
         )
 
 
-    if len(nova_senha) < 6:
+    senha_valida, erro_senha = validar_senha(nova_senha)
 
+    if not senha_valida:
         flash(
-            "A nova senha precisa ter pelo menos 6 caracteres.",
-            "erro"
-        )
+        erro_senha,
+        "erro"
+    )
 
-        return redirect(
-            url_for("minha_conta")
-        )
+    return redirect(
+        url_for("minha_conta")
+    )
 
 
     if nova_senha != confirmar_senha:
@@ -4962,7 +4990,8 @@ def alterar_senha():
 
         conn.execute("""
             UPDATE usuarios
-            SET senha = ?
+            SET senha = ?,
+            senha_versao = COALESCE(senha_versao, 0) + 1
             WHERE id = ?
         """, (
             nova_hash,
@@ -4977,9 +5006,8 @@ def alterar_senha():
 
         conn.rollback()
 
-        print(
+        logger.exception(
             "ERRO AO ALTERAR SENHA:",
-            erro
         )
 
         flash(
@@ -5006,5 +5034,13 @@ def alterar_senha():
     )
 
 # Todas as rotas e filtros precisam estar registrados ANTES de iniciar o servidor.
+# Todas as rotas e filtros precisam estar registrados ANTES de iniciar o servidor.
 if __name__ == "__main__":
-    app.run(debug=os.getenv("FLASK_DEBUG", "0") == "1")
+    debug_ativo = (
+        not EM_PRODUCAO
+        and os.getenv("FLASK_DEBUG", "0") == "1"
+    )
+
+    app.run(
+        debug=debug_ativo
+    )

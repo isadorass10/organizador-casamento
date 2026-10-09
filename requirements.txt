@@ -8,3 +8,4 @@ psycopg[binary]==3.3.6
 resend==2.46.0
 requests==2.32.5
 waitress
+redis==8.1.0
