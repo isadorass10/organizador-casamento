@@ -106,6 +106,37 @@ app.config.update(
     # Tempo máximo da sessão autenticada.
     PERMANENT_SESSION_LIFETIME=timedelta(hours=8),
 )
+
+# =========================================================
+# HEADERS DE SEGURANÇA
+# =========================================================
+
+@app.after_request
+def adicionar_headers_seguranca(response):
+
+    # Impede que o navegador tente interpretar um arquivo
+    # como um tipo de conteúdo diferente do informado.
+    response.headers["X-Content-Type-Options"] = "nosniff"
+
+    # Impede que o Preparaí seja carregado dentro de iframe
+    # de outro site, reduzindo risco de clickjacking.
+    response.headers["X-Frame-Options"] = "DENY"
+
+    # Controla o envio de informações de origem para outros sites.
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+
+    # Desativa APIs do navegador que o Preparaí não utiliza.
+    response.headers["Permissions-Policy"] = (
+        "camera=(), microphone=(), geolocation=()"
+    )
+
+    # HSTS somente em produção, onde usamos HTTPS.
+    if EM_PRODUCAO:
+        response.headers["Strict-Transport-Security"] = (
+            "max-age=31536000; includeSubDomains"
+        )
+
+    return response
 # ==========================================================
 # RESEND
 # ==========================================================
