@@ -2793,22 +2793,34 @@ def delete_fornecedor(id):
         # ==================================================
 
         conn.execute("""
-            DELETE FROM pagamentos_planejados
-            WHERE fornecedor_id = ?
-        """, (
-            id,
-        ))
+        DELETE FROM pagamentos_planejados
+        WHERE fornecedor_id = ?
+         AND fornecedor_id IN (
+          SELECT id
+          FROM fornecedores
+          WHERE usuario_id = ?
+      )
+    """, (
+    id,
+    session["usuario_id"]
+))
 
         # ==================================================
         # EXCLUI HISTÓRICO DE PAGAMENTOS
         # ==================================================
 
         conn.execute("""
-            DELETE FROM historico_pagamento
-            WHERE fornecedor_id = ?
-        """, (
-            id,
-        ))
+    DELETE FROM historico_pagamento
+    WHERE fornecedor_id = ?
+      AND fornecedor_id IN (
+          SELECT id
+          FROM fornecedores
+          WHERE usuario_id = ?
+      )
+""", (
+    id,
+    session["usuario_id"]
+))
 
         # ==================================================
         # EXCLUI FORNECEDOR
@@ -3483,18 +3495,24 @@ def editar_pagamento_planejado(id):
         # ==================================================
 
         conn.execute("""
-            UPDATE pagamentos_planejados
-            SET
-                descricao = ?,
-                valor = ?,
-                data_prevista = ?
-            WHERE id = ?
-        """, (
-            descricao,
-            valor,
-            data_prevista or None,
-            id
-        ))
+    UPDATE pagamentos_planejados
+    SET
+        descricao = ?,
+        valor = ?,
+        data_prevista = ?
+    WHERE id = ?
+      AND fornecedor_id IN (
+          SELECT id
+          FROM fornecedores
+          WHERE usuario_id = ?
+      )
+    """, (
+    descricao,
+    valor,
+    data_prevista or None,
+    id,
+    session["usuario_id"]
+    ))
 
         conn.commit()
 
@@ -3609,11 +3627,17 @@ def excluir_pagamento_planejado(id):
         # ==================================================
 
         conn.execute("""
-            DELETE FROM pagamentos_planejados
-            WHERE id = ?
-        """, (
-            id,
-        ))
+        DELETE FROM pagamentos_planejados
+        WHERE id = ?
+        AND fornecedor_id IN (
+          SELECT id
+          FROM fornecedores
+          WHERE usuario_id = ?
+      )
+    """, (
+    id,
+    session["usuario_id"]
+))
 
         conn.commit()
 
@@ -3836,12 +3860,18 @@ def registrar_planejado_como_pago(id):
         # ==================================================
 
         conn.execute("""
-            UPDATE pagamentos_planejados
-            SET status = 'Pago'
-            WHERE id = ?
-        """, (
-            id,
-        ))
+        UPDATE pagamentos_planejados
+        SET status = 'Pago'
+        WHERE id = ?
+      AND fornecedor_id IN (
+          SELECT id
+          FROM fornecedores
+          WHERE usuario_id = ?
+      )
+    """, (
+    id,
+    session["usuario_id"]
+))
 
         conn.commit()
 
